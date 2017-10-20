@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: develop
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 60000
+      maximum-pool-size: 5
+  jpa:
+    hibernate:
+      ddl-auto: none
+liquibase:
+  change-log: classpath:db/changelog/db.changelog-master.xml
+---
+spring:
+  profiles: develop
+  datasource:
+    username: postgres
+    password: password123
+    url: jdbc:postgresql://127.0.0.1:5432/postgres
