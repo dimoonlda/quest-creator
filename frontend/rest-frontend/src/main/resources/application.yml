@@ -10,12 +10,23 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+  thymeleaf:
+    mode: LEGACYHTML5
+    cache: false
 liquibase:
   change-log: classpath:db/changelog/db.changelog-master.xml
+security:
+  basic:
+    enabled: true
 ---
 spring:
   profiles: develop
   datasource:
     username: postgres
-    password: password123
+    password: dima1234
     url: jdbc:postgresql://127.0.0.1:5432/postgres
+security:
+  user:
+    password: 12NasTya33
+    name: nastya
+    role: USER
