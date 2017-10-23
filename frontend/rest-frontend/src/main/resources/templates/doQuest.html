@@ -7,6 +7,82 @@
 </head>
 <body>
 <div th:replace="fragments/header :: header">...</div>
+<div class="container">
+    <div class="row" th:if="${questStep.question}">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <h4>Завдання</h4>
+            <hr/>
+            <h5><span th:text="${questStep.question.tittle} + ': ' + ${questStep.question.value}"></span></h5>
+        </div>
+    </div>
+    <div class="row" th:if="${not #lists.isEmpty(questStep.auxiliaryDatas)}">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <h4>Вхідні дані</h4>
+            <hr/>
+            <ul>
+                <li th:each="auxField : ${questStep.auxiliaryDatas}">
+                    <div>
+                        <h5><span th:text="${auxField.tittle} + ': ' + ${auxField.value}"></span></h5>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- Key word input START-->
+    <div class="row" th:if="${questStep.type==2}">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <h4>Відповідь</h4>
+            <hr/>
+            <form method="POST" th:action="@{/doQuest}">
+                <div class="form-group row">
+                    <label for="key_word" class="col-sm-4 col-form-label">Кодове слово</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="key_word" placeholder="Кодове слово" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary"> Далі</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Key word input END-->
+    <!-- Start quest button START-->
+    <div class="row" th:if="${questStep.type==1}">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <hr/>
+            <form method="POST" th:action="@{/doQuest}">
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary"> Почати</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Start quest button END-->
+    <!-- Finish quest button START-->
+    <div class="row" th:if="${questStep.type==3}">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <hr/>
+            <form method="POST" th:action="@{/doQuest}">
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary"> Закінчити</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Finish quest button END-->
+</div>
 <div th:replace="fragments/footer :: footer">...</div>
 </body>
 </html>

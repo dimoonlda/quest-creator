@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <changeSet author="dlutai (generated)" id="1508513557030-1">
+    <changeSet author="dlutai (generated)" id="1508746065415-1">
         <createTable tableName="field_data_types">
             <column name="id" type="INT">
                 <constraints nullable="false"/>
@@ -11,7 +11,7 @@
             <column name="description" type="VARCHAR(256)"/>
         </createTable>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-2">
+    <changeSet author="dlutai (generated)" id="1508746065415-2">
         <createTable tableName="field_types">
             <column name="id" type="INT">
                 <constraints nullable="false"/>
@@ -22,7 +22,7 @@
             <column name="description" type="VARCHAR(256)"/>
         </createTable>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-3">
+    <changeSet author="dlutai (generated)" id="1508746065415-3">
         <createTable tableName="quest_step_fields">
             <column name="id" type="INT">
                 <constraints nullable="false"/>
@@ -40,7 +40,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-4">
+    <changeSet author="dlutai (generated)" id="1508746065415-4">
         <createTable tableName="quest_steps">
             <column name="id" type="INT">
                 <constraints nullable="false"/>
@@ -54,7 +54,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-5">
+    <changeSet author="dlutai (generated)" id="1508746065415-5">
         <createTable tableName="quests">
             <column name="id" type="INT">
                 <constraints nullable="false"/>
@@ -65,7 +65,7 @@
             <column name="description" type="INT"/>
         </createTable>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-6">
+    <changeSet author="dlutai (generated)" id="1508746065415-6">
         <createTable tableName="step_types">
             <column name="id" type="INT">
                 <constraints nullable="false"/>
@@ -76,7 +76,23 @@
             <column name="description" type="VARCHAR(256)"/>
         </createTable>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-7">
+    <changeSet author="dlutai (generated)" id="1508746065415-7">
+        <createTable tableName="user_quest">
+            <column name="id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quest_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quest_step_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="dlutai (generated)" id="1508746065415-8">
         <createTable tableName="users">
             <column name="id" type="INT">
                 <constraints nullable="false"/>
@@ -92,86 +108,57 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-8">
-        <insert tableName="field_data_types">
-            <column name="id" valueNumeric="1"/>
-            <column name="title" value="array"/>
-            <column name="description"/>
-        </insert>
-    </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-9">
-        <insert tableName="field_types">
-            <column name="id" valueNumeric="1"/>
-            <column name="title" value="question"/>
-            <column name="description"/>
-        </insert>
-        <insert tableName="field_types">
-            <column name="id" valueNumeric="2"/>
-            <column name="title" value="auxiliary_data"/>
-            <column name="description"/>
-        </insert>
-        <insert tableName="field_types">
-            <column name="id" valueNumeric="3"/>
-            <column name="title" value="answer"/>
-            <column name="description"/>
-        </insert>
-    </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-10">
-        <insert tableName="step_types">
-            <column name="id" valueNumeric="1"/>
-            <column name="title" value="start"/>
-            <column name="description"/>
-        </insert>
-        <insert tableName="step_types">
-            <column name="id" valueNumeric="2"/>
-            <column name="title" value="common_step"/>
-            <column name="description"/>
-        </insert>
-        <insert tableName="step_types">
-            <column name="id" valueNumeric="3"/>
-            <column name="title" value="end"/>
-            <column name="description"/>
-        </insert>
-    </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-11">
+    <changeSet author="dlutai (generated)" id="1508746065415-9">
         <addPrimaryKey columnNames="id" constraintName="field_data_type_pkey" tableName="field_data_types"/>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-12">
+    <changeSet author="dlutai (generated)" id="1508746065415-10">
         <addPrimaryKey columnNames="id" constraintName="field_types_pkey" tableName="field_types"/>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-13">
+    <changeSet author="dlutai (generated)" id="1508746065415-11">
         <addPrimaryKey columnNames="id" constraintName="quest_step_questions_pkey" tableName="quest_step_fields"/>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-14">
+    <changeSet author="dlutai (generated)" id="1508746065415-12">
         <addPrimaryKey columnNames="id" constraintName="quest_steps_pkey" tableName="quest_steps"/>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-15">
+    <changeSet author="dlutai (generated)" id="1508746065415-13">
         <addPrimaryKey columnNames="id" constraintName="quests_pkey" tableName="quests"/>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-16">
+    <changeSet author="dlutai (generated)" id="1508746065415-14">
         <addPrimaryKey columnNames="id" constraintName="step_types_pkey" tableName="step_types"/>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-17">
+    <changeSet author="dlutai (generated)" id="1508746065415-15">
+        <addPrimaryKey columnNames="id" constraintName="user_quest_pkey" tableName="user_quest"/>
+    </changeSet>
+    <changeSet author="dlutai (generated)" id="1508746065415-16">
         <addPrimaryKey columnNames="id" constraintName="users_pkey" tableName="users"/>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-18">
+    <changeSet author="dlutai (generated)" id="1508746065415-17">
         <createIndex indexName="users_user_login_uindex" tableName="users" unique="true">
             <column name="user_login"/>
         </createIndex>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-19">
+    <changeSet author="dlutai (generated)" id="1508746065415-18">
         <addForeignKeyConstraint baseColumnNames="field_data_type_id" baseTableName="quest_step_fields" constraintName="quest_step_fields__field_data_types_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="field_data_types"/>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-20">
+    <changeSet author="dlutai (generated)" id="1508746065415-19">
         <addForeignKeyConstraint baseColumnNames="field_type_id" baseTableName="quest_step_fields" constraintName="quest_step_questions__field_types_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="field_types"/>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-21">
+    <changeSet author="dlutai (generated)" id="1508746065415-20">
         <addForeignKeyConstraint baseColumnNames="quest_step_id" baseTableName="quest_step_fields" constraintName="quest_step_questions__quest_steps_fk" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="quest_steps"/>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-22">
+    <changeSet author="dlutai (generated)" id="1508746065415-21">
         <addForeignKeyConstraint baseColumnNames="step_type_id" baseTableName="quest_steps" constraintName="quest_steps__step_types_fk" deferrable="false" initiallyDeferred="false" onDelete="SET NULL" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="step_types"/>
     </changeSet>
-    <changeSet author="dlutai (generated)" id="1508513557030-23">
+    <changeSet author="dlutai (generated)" id="1508746065415-22">
         <addForeignKeyConstraint baseColumnNames="quest_id" baseTableName="quest_steps" constraintName="quest_steps_quests__fk" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="quests"/>
+    </changeSet>
+    <changeSet author="dlutai (generated)" id="1508746065415-23">
+        <addForeignKeyConstraint baseColumnNames="quest_step_id" baseTableName="user_quest" constraintName="user_quest__quest_steps_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="quest_steps"/>
+    </changeSet>
+    <changeSet author="dlutai (generated)" id="1508746065415-24">
+        <addForeignKeyConstraint baseColumnNames="quest_id" baseTableName="user_quest" constraintName="user_quest__quests_fk" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="quests"/>
+    </changeSet>
+    <changeSet author="dlutai (generated)" id="1508746065415-25">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_quest" constraintName="user_quest__users_fk" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="users"/>
     </changeSet>
 </databaseChangeLog>
