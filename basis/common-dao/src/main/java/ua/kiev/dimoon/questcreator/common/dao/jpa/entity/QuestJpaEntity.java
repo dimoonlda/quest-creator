@@ -13,7 +13,7 @@ public class QuestJpaEntity {
     @Id
     private Integer id;
     @NotNull
-    private String tittle;
+    private String title;
     private String description;
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "quest_id")
@@ -28,12 +28,12 @@ public class QuestJpaEntity {
         return this;
     }
 
-    public String getTittle() {
-        return tittle;
+    public String getTitle() {
+        return title;
     }
 
-    public QuestJpaEntity setTittle(String tittle) {
-        this.tittle = tittle;
+    public QuestJpaEntity setTitle(String title) {
+        this.title = title;
         return this;
     }
 

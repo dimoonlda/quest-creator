@@ -18,12 +18,12 @@ public class DoQuestController {
         QuestStep questStep = new QuestStep()
                 .setType(2)
                 .setQuestion(
-                        new QuestStepField().setTittle("Ключ тут").setValue("a[3]a[7]a[0]a[12]a[7]")
+                        new QuestStepField().setTitle("Ключ тут").setValue("a[3]a[7]a[0]a[12]a[7]")
                 )
                 .setAuxiliaryDatas(
                         Arrays.asList(
-                                new QuestStepField().setTittle("вхідний масив").setValue("a[] = 'ЗТ1БАМРГФОУЯЛК'"),
-                                new QuestStepField().setTittle("підказка").setValue("пароль на листку")
+                                new QuestStepField().setTitle("вхідний масив").setValue("a[] = 'ЗТ1БАМРГФОУЯЛК'"),
+                                new QuestStepField().setTitle("підказка").setValue("пароль на листку")
                         )
                 );
         model.addAttribute("questStep", questStep);
@@ -32,7 +32,7 @@ public class DoQuestController {
 
     private class QuestStepField {
         private String value;
-        private String tittle;
+        private String title;
         private String type;
 
         public String getValue() {
@@ -44,12 +44,12 @@ public class DoQuestController {
             return this;
         }
 
-        public String getTittle() {
-            return tittle;
+        public String getTitle() {
+            return title;
         }
 
-        public QuestStepField setTittle(String tittle) {
-            this.tittle = tittle;
+        public QuestStepField setTitle(String title) {
+            this.title = title;
             return this;
         }
 

@@ -9,7 +9,7 @@ public class QuestStepFieldJpaEntity {
 
     @Id
     private Integer id;
-    private String tittle;
+    private String title;
     @NotNull
     @Column(name = "field_value", nullable = false)
     private String value;
@@ -31,12 +31,12 @@ public class QuestStepFieldJpaEntity {
         return this;
     }
 
-    public String getTittle() {
-        return tittle;
+    public String getTitle() {
+        return title;
     }
 
-    public QuestStepFieldJpaEntity setTittle(String tittle) {
-        this.tittle = tittle;
+    public QuestStepFieldJpaEntity setTitle(String title) {
+        this.title = title;
         return this;
     }
 
