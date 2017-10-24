@@ -2,24 +2,59 @@ package ua.kiev.dimoon.questcreator.rest.frontend.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.QuestJpaEntity;
+import org.springframework.web.bind.annotation.RequestMethod;
+import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.UserQuestJpaEntity;
+import ua.kiev.dimoon.questcreator.front.base.dto.DtoBuilder;
+import ua.kiev.dimoon.questcreator.front.base.dto.QuestDto;
 import ua.kiev.dimoon.questcreator.services.quest.service.QuestService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class IndexController {
 
     private QuestService questService;
-
-    public IndexController(QuestService questService) {
+    private DtoBuilder dtoBuilder;
+    public IndexController(QuestService questService, DtoBuilder dtoBuilder) {
         this.questService = questService;
+        this.dtoBuilder = dtoBuilder;
     }
 
-    @RequestMapping("/index")
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index(Model model) {
-        List<QuestJpaEntity> quests = questService.getQuestsForCurrentUser();
+        List<UserQuestJpaEntity> questsForCurrentUser = questService.getQuestsForCurrentUser();
+        if (questsForCurrentUser.stream().anyMatch(userQuestJpaEntity -> null != userQuestJpaEntity.getQuestStep())) {
+            return "doQuest";
+        }
+        List<QuestDto> quests = dtoBuilder.getQuestDtos(
+                questsForCurrentUser.stream()
+                        .map(UserQuestJpaEntity::getQuest)
+                        .collect(Collectors.toList())
+        );
+        model.addAttribute("quests", quests);
+        model.addAttribute("selectedQuest", new QuestFormResult());
         return "index";
+    }
+
+    @RequestMapping(value = "/index", method = RequestMethod.POST)
+    public String startQuest(@ModelAttribute QuestFormResult questFormResult) {
+        System.out.println(questFormResult.getId());
+        return "index";
+    }
+
+    static class QuestFormResult {
+        private int id;
+
+        public int getId() {
+            return id;
+        }
+
+        public QuestFormResult setId(int id) {
+            this.id = id;
+            return this;
+        }
     }
 }

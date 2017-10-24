@@ -4,10 +4,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Import;
 import ua.kiev.dimoon.questcreator.common.dao.configuration.JpaAppCfg;
+import ua.kiev.dimoon.questcreator.front.base.configuration.FrontBaseConfig;
 import ua.kiev.dimoon.questcreator.services.quest.configuration.QuestServiceConfig;
 
 @SpringBootApplication
-@Import({JpaAppCfg.class, QuestServiceConfig.class})
+@Import(
+        {
+                JpaAppCfg.class,
+                QuestServiceConfig.class,
+                FrontBaseConfig.class
+        }
+)
 public class RestFrontEndApplication {
 
     public static void main(String[] args) {

@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>rest-frontend</module>
+        <module>front-base</module>
     </modules>
 
     <dependencies>

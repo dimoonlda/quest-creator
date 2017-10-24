@@ -13,7 +13,7 @@
         <div class="col-md-6">
             <h4>Завдання</h4>
             <hr/>
-            <h5><span th:text="${questStep.question.tittle} + ': ' + ${questStep.question.value}"></span></h5>
+            <h5><span th:text="${questStep.question.title} + ': ' + ${questStep.question.value}"></span></h5>
         </div>
     </div>
     <div class="row" th:if="${not #lists.isEmpty(questStep.auxiliaryDatas)}">
@@ -24,7 +24,7 @@
             <ul>
                 <li th:each="auxField : ${questStep.auxiliaryDatas}">
                     <div>
-                        <h5><span th:text="${auxField.tittle} + ': ' + ${auxField.value}"></span></h5>
+                        <h5><span th:text="${auxField.title} + ': ' + ${auxField.value}"></span></h5>
                     </div>
                 </li>
             </ul>

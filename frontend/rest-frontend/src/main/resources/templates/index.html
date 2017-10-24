@@ -7,6 +7,26 @@
 </head>
 <body>
 <div th:replace="fragments/header :: header">...</div>
+<div class="container">
+    <div class="row" th:if="${not #lists.isEmpty(quests)}">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <h4>Доступні квести</h4>
+            <hr/>
+            <form class="form-horizontal" role="form" action="#" th:action="@{/index}" th:object="${selectedQuest}" method="post">
+                <div class="form-check" th:each="quest : ${quests}">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" th:field="*{id}" th:value="${quest.id}"/>
+                        <span th:text="${quest.id} + ' - ' + ${quest.title}"></span>
+                        <span th:if="${quest.description}" th:text="' (' + ${quest.description} + ')'"></span>
+                    </label>
+                </div>
+                <input type="submit" value="Старт" class="btn btn-primary"/>
+                <input type="reset" value="Очистити" class="btn btn-primary"/>
+            </form>
+        </div>
+    </div>
+</div>
 <div th:replace="fragments/footer :: footer">...</div>
 </body>
 </html>
