@@ -16,5 +16,9 @@
             <groupId>ua.kiev.dimoon.quest-creator</groupId>
             <artifactId>common-dao</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ua.kiev.dimoon.quest-creator</groupId>
+            <artifactId>common-utils</artifactId>
+        </dependency>
     </dependencies>
 </project>

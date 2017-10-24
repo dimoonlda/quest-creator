@@ -8,6 +8,13 @@
 <body>
 <div th:replace="fragments/header :: header">...</div>
 <div class="container">
+    <div class="row" th:if="${currentQuest}">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <span>У Вас є незакінчений квест: </span>
+            <a th:href="@{/doQuest}" th:text="${currentQuest.id} + ' - ' + ${currentQuest.title}"></a>
+        </div>
+    </div>
     <div class="row" th:if="${not #lists.isEmpty(quests)}">
         <div class="col-md-3"></div>
         <div class="col-md-6">

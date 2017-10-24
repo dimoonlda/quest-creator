@@ -7,6 +7,7 @@ import org.springframework.util.StringUtils;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.*;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.repository.QuestJpaRepository;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.repository.UserQuestJpaRepository;
+import ua.kiev.dimoon.questcreator.common.utils.security.SecuritiUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -70,9 +71,8 @@ public class QuestServiceImpl implements QuestService {
 
     @Override
     public List<UserQuestJpaEntity> getQuestsForCurrentUser() {
-        //anonymousUser
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (!StringUtils.isEmpty(userName) && !userName.equals("anonymousUser")) {
+        if (SecuritiUtils.isAuthenticated()) {
+            String userName = SecurityContextHolder.getContext().getAuthentication().getName();
             return userQuestRepository.findByUser_UserLogin(userName);
         } else {
             return Collections.emptyList();

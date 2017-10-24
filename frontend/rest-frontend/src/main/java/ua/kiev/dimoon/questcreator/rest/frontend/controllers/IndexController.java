@@ -11,6 +11,7 @@ import ua.kiev.dimoon.questcreator.front.base.dto.QuestDto;
 import ua.kiev.dimoon.questcreator.services.quest.service.QuestService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -26,16 +27,20 @@ public class IndexController {
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index(Model model) {
         List<UserQuestJpaEntity> questsForCurrentUser = questService.getQuestsForCurrentUser();
-        if (questsForCurrentUser.stream().anyMatch(userQuestJpaEntity -> null != userQuestJpaEntity.getQuestStep())) {
-            return "doQuest";
+        final Optional<UserQuestJpaEntity> currentQuest = questsForCurrentUser.stream()
+                .filter(userQuestJpaEntity -> null != userQuestJpaEntity.getQuestStep())
+                .findFirst();
+        if (currentQuest.isPresent()) {
+            model.addAttribute("currentQuest", dtoBuilder.getQuestDto(currentQuest.get().getQuest()));
+        } else {
+            List<QuestDto> quests = dtoBuilder.getQuestDtos(
+                    questsForCurrentUser.stream()
+                            .map(UserQuestJpaEntity::getQuest)
+                            .collect(Collectors.toList())
+            );
+            model.addAttribute("quests", quests);
+            model.addAttribute("selectedQuest", new QuestFormResult());
         }
-        List<QuestDto> quests = dtoBuilder.getQuestDtos(
-                questsForCurrentUser.stream()
-                        .map(UserQuestJpaEntity::getQuest)
-                        .collect(Collectors.toList())
-        );
-        model.addAttribute("quests", quests);
-        model.addAttribute("selectedQuest", new QuestFormResult());
         return "index";
     }
 
