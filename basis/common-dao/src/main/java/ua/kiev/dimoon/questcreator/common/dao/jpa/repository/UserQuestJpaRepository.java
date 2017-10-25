@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface UserQuestJpaRepository extends JpaRepository<UserQuestJpaEntity, Integer> {
     List<UserQuestJpaEntity> findByUser_UserLogin(String userLogin);
+    UserQuestJpaEntity findFirstByUser_UserLoginAndId(String userLogin, Integer id);
 }

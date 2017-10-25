@@ -46,18 +46,22 @@ public class IndexController {
 
     @RequestMapping(value = "/index", method = RequestMethod.POST)
     public String startQuest(@ModelAttribute QuestFormResult questFormResult) {
-        System.out.println(questFormResult.getId());
-        return "index";
+        if (null != questFormResult.getId()) {
+            questService.startQuestForCurrentUser(questFormResult.getId());
+            return "redirect:/doQuest";
+        } else {
+            return "redirect:/index";
+        }
     }
 
     static class QuestFormResult {
-        private int id;
+        private Integer id;
 
-        public int getId() {
+        public Integer getId() {
             return id;
         }
 
-        public QuestFormResult setId(int id) {
+        public QuestFormResult setId(Integer id) {
             this.id = id;
             return this;
         }

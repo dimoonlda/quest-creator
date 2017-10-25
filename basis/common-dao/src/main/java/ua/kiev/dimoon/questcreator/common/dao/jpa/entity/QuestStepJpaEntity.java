@@ -2,6 +2,7 @@ package ua.kiev.dimoon.questcreator.common.dao.jpa.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Comparator;
 import java.util.Set;
 
 /**
@@ -22,6 +23,8 @@ public class QuestStepJpaEntity {
     @OneToMany
     @JoinColumn(name = "quest_step_id", nullable = false)
     private Set<QuestStepFieldJpaEntity> fields;
+
+    public static final Comparator<QuestStepJpaEntity> SORT_BY_ODER = Comparator.comparing(QuestStepJpaEntity::getOrder);
 
     public Integer getId() {
         return id;

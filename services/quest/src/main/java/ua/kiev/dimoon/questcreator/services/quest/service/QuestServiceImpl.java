@@ -6,12 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.*;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.repository.QuestJpaRepository;
+import ua.kiev.dimoon.questcreator.common.dao.jpa.repository.QuestStepFieldJpaRepository;
+import ua.kiev.dimoon.questcreator.common.dao.jpa.repository.QuestStepJpaRepository;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.repository.UserQuestJpaRepository;
 import ua.kiev.dimoon.questcreator.common.utils.security.SecuritiUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
@@ -24,6 +24,8 @@ public class QuestServiceImpl implements QuestService {
     private QuestJpaRepository questRepository;
     @Autowired
     private UserQuestJpaRepository userQuestRepository;
+    @Autowired
+    private QuestStepJpaRepository questStepRepository;
 
     ConcurrentMap<String, QuestStepJpaEntity> userToCurrentQuestStep = new ConcurrentHashMap<>();
     final QuestJpaEntity quest = new QuestJpaEntity()
@@ -82,8 +84,17 @@ public class QuestServiceImpl implements QuestService {
     @Override
     public void startQuestForCurrentUser(int questId) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        userToCurrentQuestStep.remove(userName);
-        userToCurrentQuestStep.put(userName, quest.getQuestSteps().stream().findFirst().get());
+        UserQuestJpaEntity userQuest = userQuestRepository.findFirstByUser_UserLoginAndId(userName, questId);
+        Set<QuestStepJpaEntity> questSteps = userQuest.getQuest().getQuestSteps();
+        if (null != questSteps && !questSteps.isEmpty()) {
+            questSteps.stream()
+                    .sorted(QuestStepJpaEntity.SORT_BY_ODER)
+                    .findFirst()
+                    .ifPresent(questStepEntity -> {
+                        userQuest.setQuestStep(questStepEntity);
+                        userQuestRepository.save(userQuest);
+                    });
+        }
     }
 
     @Override
