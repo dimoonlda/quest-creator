@@ -61,4 +61,12 @@ public class QuestStepJpaEntity {
         this.fields = fields;
         return this;
     }
+
+    public boolean isStartStep() {
+        return StepType.START.equals(this.getStepType());
+    }
+
+    public boolean isEndStep() {
+        return StepType.END.equals(this.getStepType());
+    }
 }

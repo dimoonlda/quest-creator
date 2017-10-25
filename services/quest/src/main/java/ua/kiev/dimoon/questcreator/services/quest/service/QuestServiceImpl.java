@@ -3,19 +3,15 @@ package ua.kiev.dimoon.questcreator.services.quest.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.*;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.repository.QuestJpaRepository;
-import ua.kiev.dimoon.questcreator.common.dao.jpa.repository.QuestStepFieldJpaRepository;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.repository.QuestStepJpaRepository;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.repository.UserQuestJpaRepository;
 import ua.kiev.dimoon.questcreator.common.utils.security.SecuritiUtils;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static ua.kiev.dimoon.questcreator.common.dao.jpa.entity.QuestStepJpaEntity.SORT_BY_ODER;
 
 @Service
 public class QuestServiceImpl implements QuestService {
@@ -26,50 +22,6 @@ public class QuestServiceImpl implements QuestService {
     private UserQuestJpaRepository userQuestRepository;
     @Autowired
     private QuestStepJpaRepository questStepRepository;
-
-    ConcurrentMap<String, QuestStepJpaEntity> userToCurrentQuestStep = new ConcurrentHashMap<>();
-    final QuestJpaEntity quest = new QuestJpaEntity()
-            .setId(1)
-            .setTitle("Test title")
-            .setDescription("It is quest for testing.")
-            .setQuestSteps(
-                    Stream.of(
-                            new QuestStepJpaEntity()
-                                    .setId(1)
-                                    .setOrder(1)
-                                    .setStepType(StepType.START),
-                            new QuestStepJpaEntity()
-                                    .setId(2)
-                                    .setOrder(2)
-                                    .setStepType(StepType.COMMON_STEP)
-                                    .setFields(
-                                            Stream.of(
-                                                    new QuestStepFieldJpaEntity()
-                                                            .setId(1)
-                                                            .setFieldType(FieldType.QUESTION)
-                                                            .setTitle("Ключ тут")
-                                                            .setValue("a[3]a[7]a[0]a[12]a[7]")
-                                                            .setFieldDataType(FieldDataType.ARRAY),
-                                                    new QuestStepFieldJpaEntity()
-                                                            .setId(2)
-                                                            .setFieldType(FieldType.AUXILIARY_DATA)
-                                                            .setTitle("вхідний масив")
-                                                            .setValue("a[] = 'ЗТ1БАМРГФОУЯЛК'")
-                                                            .setFieldDataType(FieldDataType.ARRAY),
-                                                    new QuestStepFieldJpaEntity()
-                                                            .setId(3)
-                                                            .setFieldType(FieldType.AUXILIARY_DATA)
-                                                            .setTitle("підказка")
-                                                            .setValue("пароль на листку")
-                                                            .setFieldDataType(FieldDataType.ARRAY)
-                                            ).collect(Collectors.toSet())
-                                    ),
-                            new QuestStepJpaEntity()
-                                    .setId(3)
-                                    .setOrder(3)
-                                    .setStepType(StepType.END)
-                    ).collect(Collectors.toSet())
-            );
 
     @Override
     public List<UserQuestJpaEntity> getQuestsForCurrentUser() {
@@ -88,7 +40,7 @@ public class QuestServiceImpl implements QuestService {
         Set<QuestStepJpaEntity> questSteps = userQuest.getQuest().getQuestSteps();
         if (null != questSteps && !questSteps.isEmpty()) {
             questSteps.stream()
-                    .sorted(QuestStepJpaEntity.SORT_BY_ODER)
+                    .sorted(SORT_BY_ODER)
                     .findFirst()
                     .ifPresent(questStepEntity -> {
                         userQuest.setQuestStep(questStepEntity);
@@ -99,12 +51,68 @@ public class QuestServiceImpl implements QuestService {
 
     @Override
     public Boolean checkCurrentStepAnswer(String keyWord) {
-        return keyWord.equals("1");
+        Boolean checkResult = false;
+        Optional<UserQuestJpaEntity> currentUserQuestOptional = getCurrentUserQuest();
+        Optional<QuestStepJpaEntity> currentQuestStepOptional =
+                currentUserQuestOptional.map(UserQuestJpaEntity::getQuestStep);
+
+        if (currentQuestStepOptional.isPresent()) {
+            QuestStepJpaEntity currentQuestStep = currentQuestStepOptional.get();
+            QuestStepFieldJpaEntity answerQuestStepField = currentQuestStep.getFields()
+                    .stream()
+                    .filter(questStepField -> questStepField.getFieldType().equals(FieldType.ANSWER))
+                    .findFirst()
+                    .orElse(new QuestStepFieldJpaEntity());
+            if (isKeyWordCorrect(answerQuestStepField, keyWord) || currentQuestStep.isStartStep()) {
+                UserQuestJpaEntity userQuestEntity = currentUserQuestOptional.get();
+                Optional<QuestStepJpaEntity> nextQuestStep = getNextQuestStep(userQuestEntity.getQuest(), currentQuestStep);
+                if (nextQuestStep.isPresent()) {
+                    userQuestEntity.setQuestStep(nextQuestStep.get());
+                    userQuestRepository.save(userQuestEntity);
+                    checkResult = true;
+                }
+            }
+        }
+        return checkResult;
+    }
+
+    private boolean isKeyWordCorrect(QuestStepFieldJpaEntity answerQuestStepField, String keyWord) {
+        return null != keyWord && keyWord.equals(answerQuestStepField.getValue());
+    }
+
+    private Optional<QuestStepJpaEntity> getNextQuestStep(QuestJpaEntity questEntity, QuestStepJpaEntity currentQuestStep) {
+        return questEntity.getQuestSteps().stream()
+                .sorted(SORT_BY_ODER)
+                .filter(questStep -> questStep.getOrder() > currentQuestStep.getOrder())
+                .findFirst();
+    }
+
+    private Optional<UserQuestJpaEntity> getCurrentUserQuest() {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<UserQuestJpaEntity> userQuests = userQuestRepository.findByUser_UserLogin(userName);
+        return userQuests.stream()
+                .filter(
+                        userQuestEntity ->
+                                !userQuestEntity.getCompleted()
+                                        && null != userQuestEntity.getQuestStep()
+                )
+                .findFirst();
     }
 
     @Override
-    public Optional<QuestStepJpaEntity> getNextQuestStepForCurrentUser() {
-        return null;
+    public Optional<QuestStepJpaEntity> getCurrentQuestStepForCurrentUser() {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<UserQuestJpaEntity> userQuests = userQuestRepository.findByUser_UserLogin(userName);
+        Optional<QuestStepJpaEntity> currentQuestStep =
+                userQuests.stream()
+                        .filter(
+                                userQuestEntity ->
+                                        !userQuestEntity.getCompleted()
+                                                && null != userQuestEntity.getQuestStep()
+                        )
+                        .findFirst()
+                        .map(UserQuestJpaEntity::getQuestStep);
+        return currentQuestStep;
     }
 
     @Override

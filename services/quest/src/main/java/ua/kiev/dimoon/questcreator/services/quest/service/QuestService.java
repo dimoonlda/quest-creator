@@ -10,6 +10,6 @@ public interface QuestService {
     List<UserQuestJpaEntity> getQuestsForCurrentUser();
     void startQuestForCurrentUser(int questId);
     Boolean checkCurrentStepAnswer(String keyWord);
-    Optional<QuestStepJpaEntity> getNextQuestStepForCurrentUser();
+    Optional<QuestStepJpaEntity> getCurrentQuestStepForCurrentUser();
     void finishQuestForCurrentUser();
 }
