@@ -23,7 +23,7 @@
             <form class="form-horizontal" role="form" action="#" th:action="@{/index}" th:object="${selectedQuest}" method="post">
                 <div class="form-check" th:each="quest : ${quests}">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="radio" th:field="*{id}" th:value="${quest.id}"/>
+                        <input class="form-check-input" type="radio" th:field="*{id}" th:value="${quest.id}" required/>
                         <span th:text="${quest.id} + ' - ' + ${quest.title}"></span>
                         <span th:if="${quest.description}" th:text="' (' + ${quest.description} + ')'"></span>
                     </label>

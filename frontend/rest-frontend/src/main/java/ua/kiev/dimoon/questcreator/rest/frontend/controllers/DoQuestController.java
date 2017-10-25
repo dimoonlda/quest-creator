@@ -1,11 +1,19 @@
 package ua.kiev.dimoon.questcreator.rest.frontend.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.QuestStepJpaEntity;
+import ua.kiev.dimoon.questcreator.front.base.dto.DtoBuilder;
+import ua.kiev.dimoon.questcreator.front.base.dto.QuestStepDto;
+import ua.kiev.dimoon.questcreator.services.quest.service.QuestService;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by dlutai on 23.10.17.
@@ -13,95 +21,45 @@ import java.util.List;
 @Controller
 public class DoQuestController {
 
-    @RequestMapping("/doQuest")
+    @Autowired private QuestService questService;
+    @Autowired private DtoBuilder dtoBuilder;
+
+    @RequestMapping(value = "/doQuest", method = RequestMethod.GET)
     public String doQuest(Model model) {
-        QuestStep questStep = new QuestStep()
-                .setType(2)
-                .setQuestion(
-                        new QuestStepField().setTitle("Ключ тут").setValue("a[3]a[7]a[0]a[12]a[7]")
-                )
-                .setAuxiliaryDatas(
-                        Arrays.asList(
-                                new QuestStepField().setTitle("вхідний масив").setValue("a[] = 'ЗТ1БАМРГФОУЯЛК'"),
-                                new QuestStepField().setTitle("підказка").setValue("пароль на листку")
-                        )
-                );
-        model.addAttribute("questStep", questStep);
+        model.addAttribute("questStepAnswer", new QuestStepAnswerFormResult());
+        Optional<QuestStepJpaEntity> nextQuestStep = questService.getCurrentQuestStepForCurrentUser();
+        if (nextQuestStep.isPresent()) {
+            QuestStepDto questStep = dtoBuilder.getQuestStepDto(nextQuestStep.get());
+            model.addAttribute("questStep", questStep);
+        }
         return "doQuest";
     }
 
-    private class QuestStepField {
-        private String value;
-        private String title;
-        private String type;
-
-        public String getValue() {
-            return value;
+    @RequestMapping(value = "/doQuest", method = RequestMethod.POST)
+    public String doQuest(@ModelAttribute QuestStepAnswerFormResult questStepAnswer, BindingResult bindingResult, Model model) {
+        Boolean checkResult = questService.checkCurrentStepAnswer(questStepAnswer.getKeyWord());
+        if (!checkResult) {
+            Optional<QuestStepJpaEntity> nextQuestStep = questService.getCurrentQuestStepForCurrentUser();
+            if (nextQuestStep.isPresent()) {
+                QuestStepDto questStep = dtoBuilder.getQuestStepDto(nextQuestStep.get());
+                model.addAttribute("questStep", questStep);
+            }
+            bindingResult.addError(new ObjectError("keyWord", "Wrong answer!!!"));
+            model.addAttribute("questStepAnswer", questStepAnswer);
+            return "doQuest";
         }
-
-        public QuestStepField setValue(String value) {
-            this.value = value;
-            return this;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public QuestStepField setTitle(String title) {
-            this.title = title;
-            return this;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public QuestStepField setType(String type) {
-            this.type = type;
-            return this;
-        }
+        return "redirect:/doQuest";
     }
 
-    private class QuestStep {
-        private int id;
-        private QuestStepField question;
-        private List<QuestStepField> auxiliaryDatas;
-        private int type;
+    static class QuestStepAnswerFormResult {
+        private String keyWord;
 
-        public QuestStepField getQuestion() {
-            return question;
+        public String getKeyWord() {
+            return keyWord;
         }
 
-        public QuestStep setQuestion(QuestStepField question) {
-            this.question = question;
-            return this;
-        }
-
-        public List<QuestStepField> getAuxiliaryDatas() {
-            return auxiliaryDatas;
-        }
-
-        public QuestStep setAuxiliaryDatas(List<QuestStepField> auxiliaryDatas) {
-            this.auxiliaryDatas = auxiliaryDatas;
-            return this;
-        }
-
-        public int getType() {
-            return type;
-        }
-
-        public QuestStep setType(int type) {
-            this.type = type;
-            return this;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public QuestStep setId(int id) {
-            this.id = id;
+        public QuestStepAnswerFormResult setKeyWord(String keyWord) {
+            this.keyWord = keyWord;
             return this;
         }
     }
