@@ -6,6 +6,6 @@ import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.UserQuestJpaEntity;
 import java.util.List;
 
 public interface UserQuestJpaRepository extends JpaRepository<UserQuestJpaEntity, Integer> {
-    List<UserQuestJpaEntity> findByUser_UserLogin(String userLogin);
+    List<UserQuestJpaEntity> findByUser_UserLoginAndCompleted(String userLogin, Boolean completed);
     UserQuestJpaEntity findFirstByUser_UserLoginAndId(String userLogin, Integer id);
 }

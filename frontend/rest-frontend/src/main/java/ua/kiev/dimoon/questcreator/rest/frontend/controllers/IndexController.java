@@ -30,7 +30,7 @@ public class IndexController {
         final Optional<UserQuestJpaEntity> currentQuest = questsForCurrentUser.stream()
                 .filter(userQuestJpaEntity -> null != userQuestJpaEntity.getQuestStep())
                 .findFirst();
-        if (currentQuest.isPresent()) {
+        if (currentQuest.isPresent() && !currentQuest.get().getCompleted()) {
             model.addAttribute("currentQuest", dtoBuilder.getQuestDto(currentQuest.get().getQuest()));
         } else {
             List<QuestDto> quests = dtoBuilder.getQuestDtos(

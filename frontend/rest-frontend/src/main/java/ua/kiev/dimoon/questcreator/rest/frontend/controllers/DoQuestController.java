@@ -18,12 +18,13 @@ import java.util.Optional;
  * Created by dlutai on 23.10.17.
  */
 @Controller
+@RequestMapping(value = "/doQuest")
 public class DoQuestController {
 
     @Autowired private QuestService questService;
     @Autowired private DtoBuilder dtoBuilder;
 
-    @RequestMapping(value = "/doQuest", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public String doQuest(@ModelAttribute("checkResult") final Object checkResult,
                           @ModelAttribute("questStepAnswer") QuestStepAnswerForm questStepAnswer,
                           Model model) {
@@ -38,13 +39,19 @@ public class DoQuestController {
         return "doQuest";
     }
 
-    @RequestMapping(value = "/doQuest", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public String doQuest(@ModelAttribute QuestStepAnswerForm questStepAnswer,
                           final RedirectAttributes redirectAttributes) {
         Boolean checkResult = questService.checkCurrentStepAnswer(questStepAnswer.getKeyWord());
         redirectAttributes.addFlashAttribute("checkResult", checkResult);
         redirectAttributes.addFlashAttribute("questStepAnswer", questStepAnswer);
         return "redirect:/doQuest";
+    }
+
+    @RequestMapping(value = "/finish", method = RequestMethod.POST)
+    public String finishQuest() {
+        questService.finishQuestForCurrentUser();
+        return "redirect:/";
     }
 
     static class QuestStepAnswerForm {

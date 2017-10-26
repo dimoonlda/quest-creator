@@ -27,7 +27,7 @@ public class QuestServiceImpl implements QuestService {
     public List<UserQuestJpaEntity> getQuestsForCurrentUser() {
         if (SecuritiUtils.isAuthenticated()) {
             String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-            return userQuestRepository.findByUser_UserLogin(userName);
+            return userQuestRepository.findByUser_UserLoginAndCompleted(userName, false);
         } else {
             return Collections.emptyList();
         }
@@ -89,34 +89,32 @@ public class QuestServiceImpl implements QuestService {
 
     private Optional<UserQuestJpaEntity> getCurrentUserQuest() {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<UserQuestJpaEntity> userQuests = userQuestRepository.findByUser_UserLogin(userName);
+        List<UserQuestJpaEntity> userQuests = userQuestRepository.findByUser_UserLoginAndCompleted(userName, false);
         return userQuests.stream()
-                .filter(
-                        userQuestEntity ->
-                                !userQuestEntity.getCompleted()
-                                        && null != userQuestEntity.getQuestStep()
-                )
+                .filter(userQuestEntity -> null != userQuestEntity.getQuestStep())
                 .findFirst();
     }
 
     @Override
     public Optional<QuestStepJpaEntity> getCurrentQuestStepForCurrentUser() {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<UserQuestJpaEntity> userQuests = userQuestRepository.findByUser_UserLogin(userName);
-        Optional<QuestStepJpaEntity> currentQuestStep =
-                userQuests.stream()
-                        .filter(
-                                userQuestEntity ->
-                                        !userQuestEntity.getCompleted()
-                                                && null != userQuestEntity.getQuestStep()
-                        )
-                        .findFirst()
-                        .map(UserQuestJpaEntity::getQuestStep);
-        return currentQuestStep;
+        List<UserQuestJpaEntity> userQuests = userQuestRepository.findByUser_UserLoginAndCompleted(userName, false);
+        return userQuests.stream()
+                .filter(userQuestEntity -> null != userQuestEntity.getQuestStep())
+                .findFirst()
+                .map(UserQuestJpaEntity::getQuestStep);
     }
 
     @Override
     public void finishQuestForCurrentUser() {
-
+        Optional<UserQuestJpaEntity> currentUserQuestOptional = getCurrentUserQuest();
+        UserQuestJpaEntity currentUserQuest;
+        if (currentUserQuestOptional.isPresent()
+                && (currentUserQuest = currentUserQuestOptional.get()).getQuestStep() != null
+                && !currentUserQuest.getCompleted()
+                && StepType.END.equals(currentUserQuest.getQuestStep().getStepType())) {
+            currentUserQuest.setCompleted(true);
+            userQuestRepository.save(currentUserQuest);
+        }
     }
 }
