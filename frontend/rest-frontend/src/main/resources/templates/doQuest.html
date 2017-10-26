@@ -7,7 +7,10 @@
 </head>
 <body>
 <div th:replace="fragments/header :: header">...</div>
-<div class="container" th:if="${questStep}">
+<div class="container" th:if="${questStepAnswer.questStep}" th:with="questStep=${questStepAnswer.questStep}">
+    <div th:if="${T(java.lang.Boolean).FALSE.equals(checkResult)}" class="alert alert-danger" role="alert">
+        Відповідь невірна!
+    </div>
     <div class="row" th:if="${questStep.question}">
         <div class="col-md-3"></div>
         <div class="col-md-6">
@@ -44,9 +47,6 @@
                     <div class="col-md-12">
                         <h4>Відповідь</h4>
                         <hr/>
-                        <div th:if="${#fields.hasErrors('keyWord')}" class="alert alert-danger" role="alert" th:errors="*{keyWord}">
-                            Wrong answer!
-                        </div>
                         <div class="form-group row">
                             <label for="key_word" class="col-sm-4 col-form-label">Кодове слово</label>
                             <div class="col-sm-6">
