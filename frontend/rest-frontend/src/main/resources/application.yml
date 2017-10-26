@@ -19,8 +19,6 @@ liquibase:
 security:
   basic:
     enabled: true
-logging:
-  level.org.hibernate: debug
 ---
 spring:
   profiles: develop
@@ -33,3 +31,20 @@ security:
     password: 12NasTya33
     name: nastya
     role: USER
+logging:
+  level.org.hibernate: debug
+---
+spring:
+  profiles: heroku
+  datasource:
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+security:
+  user:
+    password: 12NasTya33
+    name: nastya
+    role: USER
+liquibase:
+  change-log: classpath:db/changelog/db.changelog-master.xml
+  enabled: true
