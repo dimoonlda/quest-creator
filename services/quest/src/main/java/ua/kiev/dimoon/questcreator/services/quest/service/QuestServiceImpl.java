@@ -9,7 +9,10 @@ import ua.kiev.dimoon.questcreator.common.dao.jpa.repository.QuestStepJpaReposit
 import ua.kiev.dimoon.questcreator.common.dao.jpa.repository.UserQuestJpaRepository;
 import ua.kiev.dimoon.questcreator.common.utils.security.SecuritiUtils;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static ua.kiev.dimoon.questcreator.common.dao.jpa.entity.QuestStepJpaEntity.SORT_BY_ODER;
 
@@ -36,12 +39,11 @@ public class QuestServiceImpl implements QuestService {
     @Override
     public void startQuestForCurrentUser(int questId) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        UserQuestJpaEntity userQuest = userQuestRepository.findFirstByUser_UserLoginAndId(userName, questId);
+        UserQuestJpaEntity userQuest = userQuestRepository.findFirstByUser_UserLoginAndQuest_Id(userName, questId);
         Set<QuestStepJpaEntity> questSteps = userQuest.getQuest().getQuestSteps();
         if (null != questSteps && !questSteps.isEmpty()) {
             questSteps.stream()
-                    .sorted(SORT_BY_ODER)
-                    .findFirst()
+                    .min(SORT_BY_ODER)
                     .ifPresent(questStepEntity -> {
                         userQuest.setQuestStep(questStepEntity);
                         userQuestRepository.save(userQuest);
@@ -57,12 +59,15 @@ public class QuestServiceImpl implements QuestService {
                 currentUserQuestOptional.map(UserQuestJpaEntity::getQuestStep);
 
         if (currentQuestStepOptional.isPresent()) {
+
             QuestStepJpaEntity currentQuestStep = currentQuestStepOptional.get();
+
             QuestStepFieldJpaEntity answerQuestStepField = currentQuestStep.getFields()
                     .stream()
                     .filter(questStepField -> questStepField.getFieldType().equals(FieldType.ANSWER))
                     .findFirst()
                     .orElse(new QuestStepFieldJpaEntity());
+
             if (isKeyWordCorrect(answerQuestStepField, keyWord) || currentQuestStep.isStartStep()) {
                 UserQuestJpaEntity userQuestEntity = currentUserQuestOptional.get();
                 Optional<QuestStepJpaEntity> nextQuestStep = getNextQuestStep(userQuestEntity.getQuest(), currentQuestStep);
