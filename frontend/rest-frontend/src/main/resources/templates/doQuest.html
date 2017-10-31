@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+>
 <head>
     <title>Quest</title>
     <thymeleaf th:replace="fragments/head :: head"/>
@@ -16,9 +16,15 @@
         <div class="col-md-6">
             <h4>Завдання</h4>
             <hr/>
-            <h5><span th:if="${questStep.question.title}" th:text="${questStep.question.title} + ': '"></span>
-                <span th:if="${questStep.question.value}" th:text="${questStep.question.value}"></span>
-            </h5>
+            <div th:if="${questStep.question.fieldDataType==T(ua.kiev.dimoon.questcreator.common.dao.jpa.entity.FieldDataType).IMAGE_URL}">
+                <h5><span th:if="${questStep.question.title}" th:text="${questStep.question.title} + ': '"></span></h5>
+                <img th:src="${questStep.question.value}" th:alt="${questStep.question.title}"/>
+            </div>
+            <div th:if="${questStep.question.fieldDataType==T(ua.kiev.dimoon.questcreator.common.dao.jpa.entity.FieldDataType).ARRAY}">
+                <h5> - <span th:if="${questStep.question.title}" th:text="${questStep.question.title} + ': '"></span>
+                    <span th:if="${questStep.question.value}" th:text="${questStep.question.value}"></span>
+                </h5>
+            </div>
         </div>
     </div>
     <div class="row" th:if="${not #lists.isEmpty(questStep.auxiliaryDatas)}">
@@ -26,15 +32,17 @@
         <div class="col-md-6">
             <h4>Вхідні дані</h4>
             <hr/>
-            <ul>
-                <li th:each="auxField : ${questStep.auxiliaryDatas}">
-                    <div>
-                        <h5><span th:if="${auxField.title}" th:text="${auxField.title} + ': '"></span>
-                            <span th:if="${auxField.value}" th:text="${auxField.value}"></span>
-                        </h5>
-                    </div>
-                </li>
-            </ul>
+            <div th:each="auxField : ${questStep.auxiliaryDatas}">
+                <div th:if="${auxField.fieldDataType==T(ua.kiev.dimoon.questcreator.common.dao.jpa.entity.FieldDataType).IMAGE_URL}">
+                    <h5><span th:if="${auxField.title}" th:text="${auxField.title} + ': '"></span></h5>
+                    <img th:src="${auxField.value}" th:alt="${auxField.title}"/>
+                </div>
+                <div th:if="${auxField.fieldDataType==T(ua.kiev.dimoon.questcreator.common.dao.jpa.entity.FieldDataType).ARRAY}">
+                    <h5> - <span th:if="${auxField.title}" th:text="${auxField.title} + ': '"></span>
+                        <span th:if="${auxField.value}" th:text="${auxField.value}"></span>
+                    </h5>
+                </div>
+            </div>
         </div>
     </div>
     <!-- Key word input START-->
