@@ -7,12 +7,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import javax.sql.DataSource;
+
 /**
  * Created by admin on 21.10.2017.
  */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired private DataSource dataSource;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -28,10 +33,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
     }
 
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .jdbcAuthentication()
+                .dataSource(dataSource)
+                .usersByUsernameQuery("select user_login as username, user_password as password, 'true' as enabled from users where user_login = ?")
+                .authoritiesByUsernameQuery("select u.user_login as username, r.role_name as authority from user_roles r left join users u on u.id = r.user_id where u.user_login = ?");
 //                .inMemoryAuthentication()
 //                .withUser("nastya").password("12NasTya33").roles("USER"); //QmFzaWMgbmFzdHlhOjEyTmFzVHlhMzM=
-//    }
+    }
 }
