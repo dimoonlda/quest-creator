@@ -26,11 +26,6 @@ spring:
     username: postgres
     password: dima1234
     url: jdbc:postgresql://127.0.0.1:5432/postgres
-security:
-  user:
-    password: 12NasTya33
-    name: nastya
-    role: USER
 logging:
   level.org.hibernate: debug
 ---
@@ -40,11 +35,6 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
     url: ${SPRING_DATASOURCE_URL}
-security:
-  user:
-    password: 12NasTya33
-    name: nastya
-    role: USER
 liquibase:
   change-log: classpath:db/changelog/db.changelog-master.xml
   enabled: true
