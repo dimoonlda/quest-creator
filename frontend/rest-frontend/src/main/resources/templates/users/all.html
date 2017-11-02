@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title>Users</title>
+    <thymeleaf th:replace="fragments/head :: head"/>
+</head>
+<body>
+<div th:replace="fragments/header :: header">...</div>
+<div class="container">
+    <form style="visibility: hidden" id="delete_user_form" method="post" action="#" th:action="@{/users}">
+        <input id="user_id">
+    </form>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Login</th>
+            <th>First Name</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td><a th:href="@{/users/view/{id}/(id=${user.id})}" th:text="${user.userLogin}"></a> </td>
+            <td th:text="${user.firstName}"></td>
+            <td><a class="btn btn-primary" role="button" th:href="@{#}" th:onclick="|send_delete_user('${user.id}')|">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:replace="fragments/footer :: footer">...</div>
+<script>
+    function send_delete_user(id) {
+        console.log('send_delete: ' + id);
+        $('#delete_user_form').attr('action', '/users/delete/' + id).submit();
+    }
+</script>
+</body>
+</html>

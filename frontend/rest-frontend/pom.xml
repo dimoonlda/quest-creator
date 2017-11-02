@@ -26,6 +26,14 @@
         </dependency>
         <dependency>
             <groupId>ua.kiev.dimoon.quest-creator</groupId>
+            <artifactId>user-service-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ua.kiev.dimoon.quest-creator</groupId>
+            <artifactId>user-service-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ua.kiev.dimoon.quest-creator</groupId>
             <artifactId>front-base</artifactId>
         </dependency>
     </dependencies>

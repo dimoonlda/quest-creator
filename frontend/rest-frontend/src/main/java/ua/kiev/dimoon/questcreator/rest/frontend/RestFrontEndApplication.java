@@ -6,12 +6,14 @@ import org.springframework.context.annotation.Import;
 import ua.kiev.dimoon.questcreator.common.dao.configuration.JpaAppCfg;
 import ua.kiev.dimoon.questcreator.front.base.configuration.FrontBaseConfig;
 import ua.kiev.dimoon.questcreator.quest.service.impl.configuration.QuestServiceConfig;
+import ua.kiev.dimoon.questcreator.user.service.impl.configuration.UserServiceConfig;
 
 @SpringBootApplication
 @Import(
         {
                 JpaAppCfg.class,
                 QuestServiceConfig.class,
+                UserServiceConfig.class,
                 FrontBaseConfig.class
         }
 )
