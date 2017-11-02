@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.QuestStepJpaEntity;
 import ua.kiev.dimoon.questcreator.front.base.dto.DtoBuilder;
 import ua.kiev.dimoon.questcreator.front.base.dto.QuestStepDto;
-import ua.kiev.dimoon.questcreator.services.quest.service.QuestService;
+import ua.kiev.dimoon.questcreator.quest.service.api.services.QuestService;
 
 import java.util.Optional;
 

@@ -42,7 +42,22 @@
             </dependency>
             <dependency>
                 <groupId>ua.kiev.dimoon.quest-creator</groupId>
-                <artifactId>quest-service</artifactId>
+                <artifactId>quest-service-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ua.kiev.dimoon.quest-creator</groupId>
+                <artifactId>quest-service-impl</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ua.kiev.dimoon.quest-creator</groupId>
+                <artifactId>user-service-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ua.kiev.dimoon.quest-creator</groupId>
+                <artifactId>user-service-impl</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

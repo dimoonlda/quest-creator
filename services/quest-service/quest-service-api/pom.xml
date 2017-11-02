@@ -3,18 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>quest-creator</artifactId>
+        <artifactId>quest-service</artifactId>
         <groupId>ua.kiev.dimoon.quest-creator</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>services</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>quest-service</module>
-        <module>user-service</module>
-    </modules>
+    <artifactId>quest-service-api</artifactId>
 
 
 </project>

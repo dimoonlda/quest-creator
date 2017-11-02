@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.UserQuestJpaEntity;
 import ua.kiev.dimoon.questcreator.front.base.dto.DtoBuilder;
 import ua.kiev.dimoon.questcreator.front.base.dto.QuestDto;
-import ua.kiev.dimoon.questcreator.services.quest.service.QuestService;
+import ua.kiev.dimoon.questcreator.quest.service.api.services.QuestService;
 
 import java.util.List;
 import java.util.Optional;
