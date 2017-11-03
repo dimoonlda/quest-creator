@@ -8,5 +8,6 @@ import java.util.Optional;
 public interface UserService {
     List<UserJpaEntity> getUsers();
     void delete(Integer userId);
+    UserJpaEntity save(UserJpaEntity userEntity);
     Optional<UserJpaEntity> findUserById(Integer userId);
 }

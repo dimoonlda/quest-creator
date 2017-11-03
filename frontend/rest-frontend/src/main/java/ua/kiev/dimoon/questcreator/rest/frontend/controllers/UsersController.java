@@ -3,6 +3,7 @@ package ua.kiev.dimoon.questcreator.rest.frontend.controllers;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,4 +50,22 @@ public class UsersController {
                 );
         return "/users/view";
     }
+
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/edit/{userId}", method = RequestMethod.GET)
+    public String editUser(Model model, @PathVariable Integer userId) {
+        userService.findUserById(userId)
+                .ifPresent(
+                        userEntity -> model.addAttribute("user", userEntity)
+                );
+        return "/users/form";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public String saveUser(Model model, @ModelAttribute(value = "user") UserJpaEntity userEntity) {
+        userService.save(userEntity);
+        return "redirect:/users/view/" + userEntity.getId();
+    }
+
 }

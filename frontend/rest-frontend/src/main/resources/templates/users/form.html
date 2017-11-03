@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${user.userLogin}">User</title>
+    <thymeleaf th:replace="fragments/head :: head"/>
+</head>
+<body>
+<div th:replace="fragments/header :: header">...</div>
+<div class="container">
+    <form class="form-horizontal" role="form" method="POST" th:object="${user}" th:action="@{/users/save}">
+        <input style="visibility: hidden" type="text" th:field="*{id}" id="id">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="userLogin" th:text="#{users.form.user.userLogin}">Login</label>
+                    <input type="text" th:field="*{userLogin}" name="userLogin" class="form-control" id="userLogin"
+                           required autofocus>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="userPassword" th:text="#{users.form.user.userPassword}">Password</label>
+                    <input type="text" th:field="*{userPassword}" name="userPassword" class="form-control"
+                           id="userPassword" required>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="firstName" th:text="#{users.form.user.firstName}">First name</label>
+                    <input type="text" th:field="*{firstName}" name="firstName" class="form-control" id="firstName"
+                           required>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding-top: 1rem">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-success">
+                    <span th:text="#{users.form.btn.save}">Save</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<div th:replace="fragments/footer :: footer">...</div>
+</body>
+</html>

@@ -28,6 +28,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserJpaEntity save(UserJpaEntity userEntity) {
+        UserJpaEntity newUser = new UserJpaEntity();
+        if (null != userEntity.getId()) {
+            newUser = userRepository.findOne(userEntity.getId());
+        }
+        newUser.setFirstName(userEntity.getFirstName());
+        newUser.setUserPassword(userEntity.getUserPassword());
+        newUser.setUserLogin(userEntity.getUserLogin());
+        userRepository.save(newUser);
+        return newUser;
+    }
+
+    @Override
     public Optional<UserJpaEntity> findUserById(Integer userId) {
         return userRepository.findById(userId);
     }
