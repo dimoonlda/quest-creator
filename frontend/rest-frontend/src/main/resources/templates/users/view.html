@@ -12,23 +12,24 @@
         <div class="col-sm-4">
             <div class="card">
                 <div class="card-header">
-                    <span th:text="|User: ${user.userLogin}|"></span>
+                    <span th:text="|#{users.view.userInfo.user}: ${user.userLogin}|"></span>
                 </div>
                 <div class="card-body">
-                    <p class="card-text" th:text="|ID: ${user.id}|"></p>
-                    <p class="card-text" th:text="|First name: ${user.firstName}|"></p>
-                    <a href="#" class="btn btn-primary">Edit</a>
+                    <p class="card-text" th:text="|#{users.view.userInfo.id}: ${user.id}|"></p>
+                    <p class="card-text" th:text="|#{users.view.userInfo.firstName}: ${user.firstName}|"></p>
+                    <a href="#" class="btn btn-primary" th:text="#{users.view.btn.edit.user}">Edit</a>
                 </div>
             </div>
         </div>
         <div class="col-sm-4">
             <div class="card">
                 <div class="card-header">
-                    <span>Active quest</span>
+                    <span th:text="#{users.view.activeQuest}">Active quest</span>
                 </div>
-                <div class="card-body">
-                    <p class="card-text" th:if="${user.currentQuest}" th:text="|${user.currentQuest.id}: ${user.currentQuest.title}|"></p>
-                    <a href="#" class="btn btn-primary" th:if="${user.currentQuest}">Show</a>
+                <div class="card-body" th:if="${user.currentQuest}">
+                    <p class="card-text" th:text="|#{users.view.activeQuest.id}: ${user.currentQuest.id}|"></p>
+                    <p class="card-text" th:text="|#{users.view.activeQuest.title}: ${user.currentQuest.title}|"></p>
+                    <a href="#" class="btn btn-primary" th:text="#{users.view.btn.show.activeQuest}">Show</a>
                 </div>
             </div>
         </div>

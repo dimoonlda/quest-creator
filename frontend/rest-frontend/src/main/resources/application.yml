@@ -13,6 +13,8 @@ spring:
   thymeleaf:
     mode: LEGACYHTML5
     cache: false
+  messages:
+    basename: i18n/messages
 liquibase:
   change-log: classpath:db/changelog/db.changelog-master.xml
   enabled: false

@@ -8,13 +8,13 @@
 <body>
 <div th:replace="fragments/header :: header">...</div>
 <div class="container" th:if="${questStepAnswer.questStep}" th:with="questStep=${questStepAnswer.questStep}">
-    <div th:if="${T(java.lang.Boolean).FALSE.equals(checkResult)}" class="alert alert-danger" role="alert">
-        Відповідь невірна!
+    <div th:if="${T(java.lang.Boolean).FALSE.equals(checkResult)}"
+         class="alert alert-danger" role="alert" th:text="#{doQuest.error.wrongAnswer}">Відповідь невірна!
     </div>
     <div class="row" th:if="${questStep.question}">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-            <h4>Завдання</h4>
+            <h4 th:text="#{doQuest.task}">Task</h4>
             <hr/>
             <div th:if="${questStep.question.fieldDataType==T(ua.kiev.dimoon.questcreator.common.dao.jpa.entity.FieldDataType).IMAGE_URL}">
                 <h5><span th:if="${questStep.question.title}" th:text="${questStep.question.title} + ': '"></span></h5>
@@ -30,7 +30,7 @@
     <div class="row" th:if="${not #lists.isEmpty(questStep.auxiliaryDatas)}">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-            <h4>Вхідні дані</h4>
+            <h4 th:text="#{doQuest.auxiliaryData}">Вхідні дані</h4>
             <hr/>
             <div th:each="auxField : ${questStep.auxiliaryDatas}">
                 <div th:if="${auxField.fieldDataType==T(ua.kiev.dimoon.questcreator.common.dao.jpa.entity.FieldDataType).IMAGE_URL}">
@@ -53,20 +53,20 @@
             <form method="POST" class="form-horizontal" role="form" action="#" th:action="@{/doQuest}" th:object="${questStepAnswer}">
                 <div class="row" th:if="${questStep.needAnswer}">
                     <div class="col-md-12">
-                        <h4>Відповідь</h4>
+                        <h4 th:text="#{doQuest.answer}">Відповідь</h4>
                         <hr/>
                         <div class="form-group row">
-                            <label for="key_word" class="col-sm-4 col-form-label">Кодове слово</label>
+                            <label for="key_word" class="col-sm-4 col-form-label" th:text="#{doQuest.keyWord}">Кодове слово</label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" th:field="*{keyWord}" id="key_word" placeholder="Кодове слово"
-                                       required>
+                                <input type="text" class="form-control" th:field="*{keyWord}" id="key_word"
+                                       th:placeholder="#{doQuest.keyWord}" required>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-10">
-                        <button type="submit" class="btn btn-primary"> Далі</button>
+                        <button type="submit" class="btn btn-primary" th:text="#{doQuest.btn.next}"> Далі</button>
                     </div>
                 </div>
             </form>
@@ -81,7 +81,7 @@
             <form method="POST" class="form-horizontal" role="form" action="#" th:action="@{/doQuest}">
                 <div class="form-group row">
                     <div class="col-sm-10">
-                        <button type="submit" class="btn btn-primary"> Почати</button>
+                        <button type="submit" class="btn btn-primary" th:text="#{doQuest.btn.start}"> Почати</button>
                     </div>
                 </div>
             </form>
@@ -96,7 +96,7 @@
             <form method="POST" class="form-horizontal" role="form" action="#" th:action="@{/doQuest/finish}">
                 <div class="form-group row">
                     <div class="col-sm-10">
-                        <button type="submit" class="btn btn-primary"> Закінчити</button>
+                        <button type="submit" class="btn btn-primary" th:text="#{doQuest.btn.finish}"> Закінчити</button>
                     </div>
                 </div>
             </form>

@@ -4,7 +4,7 @@
 <body>
 <div th:fragment="header">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" th:href="@{/}">Quest creator</a>
+        <a class="navbar-brand" th:href="@{/}" th:text="#{header.brand.title}"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -13,21 +13,22 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/index}">Home</a>
+                    <a class="nav-link" th:href="@{/index}" th:text="#{header.menu.home}">Home</a>
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/doQuest}">Quest</a>
+                    <a class="nav-link" th:href="@{/doQuest}" th:text="#{header.menu.doQuest}">Quest</a>
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/profile}">Profile</a>
+                    <a class="nav-link" th:href="@{/profile}" th:text="#{header.menu.profile}">Profile</a>
                 </li>
                 <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       th:text="#{header.menu.admin}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Admin
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#" th:href="@{/users}">Users</a>
-                        <a class="dropdown-item" href="#" th:href="@{/quests}">Quests</a>
+                        <a class="dropdown-item" href="#" th:href="@{/users}" th:text="#{header.menu.admin.users}">Users</a>
+                        <a class="dropdown-item" href="#" th:href="@{/quests}" th:text="#{header.menu.admin.quests}">Quests</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">Something else here</a>
                     </div>
@@ -35,10 +36,10 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="nav-item" sec:authorize="!isAuthenticated()">
-                    <a class="nav-link" th:href="@{/login}">&nbsp;Sign in</a>
+                    <a class="nav-link" th:href="@{/login}" th:text="#{header.menu.signIn}">&nbsp;Sign in</a>
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{#}" onclick="$('#logout_form').submit();">&nbsp;Logout</a>
+                    <a class="nav-link" th:href="@{#}" onclick="$('#logout_form').submit();" th:text="#{header.menu.logOut}">&nbsp;Logout</a>
                     <form style="visibility: hidden" id="logout_form" method="post" action="#" th:action="@{/logout}"></form>
                 </li>
             </ul>
