@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${user.userLogin}">User</title>
+    <thymeleaf th:replace="fragments/head :: head"/>
+</head>
+<body>
+<div th:replace="fragments/header :: header">...</div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-header">
+                    <span th:text="|User: ${user.userLogin}|"></span>
+                </div>
+                <div class="card-body">
+                    <p class="card-text" th:text="|ID: ${user.id}|"></p>
+                    <p class="card-text" th:text="|First name: ${user.firstName}|"></p>
+                    <a href="#" class="btn btn-primary">Edit</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-header">
+                    <span>Active quest</span>
+                </div>
+                <div class="card-body">
+                    <p class="card-text" th:if="${user.currentQuest}" th:text="|${user.currentQuest.id}: ${user.currentQuest.title}|"></p>
+                    <a href="#" class="btn btn-primary" th:if="${user.currentQuest}">Show</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+</div>
+<div th:replace="fragments/footer :: footer">...</div>
+</body>
+</html>

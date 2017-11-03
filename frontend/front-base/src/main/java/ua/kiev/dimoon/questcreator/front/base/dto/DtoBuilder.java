@@ -2,10 +2,8 @@ package ua.kiev.dimoon.questcreator.front.base.dto;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.FieldType;
-import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.QuestJpaEntity;
-import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.QuestStepFieldJpaEntity;
-import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.QuestStepJpaEntity;
+import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.*;
+import ua.kiev.dimoon.questcreator.quest.service.api.services.QuestService;
 
 import java.util.Collection;
 import java.util.List;
@@ -64,4 +62,10 @@ public class DtoBuilder {
         return questStepDto;
     }
 
+    public UserDto getUserDto(UserJpaEntity userEntity) {
+        UserDto userDto = modelMapper.map(userEntity, UserDto.class);
+        QuestService.findCurrentQuest(userEntity.getQuests())
+                .ifPresent(quest -> userDto.setCurrentQuest(modelMapper.map(quest, QuestDto.class)));
+        return userDto;
+    }
 }

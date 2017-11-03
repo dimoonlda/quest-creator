@@ -6,6 +6,7 @@ import ua.kiev.dimoon.questcreator.common.dao.jpa.repository.UserJpaRepository;
 import ua.kiev.dimoon.questcreator.user.service.api.services.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,5 +25,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Integer userId) {
         userRepository.delete(userId);
+    }
+
+    @Override
+    public Optional<UserJpaEntity> findUserById(Integer userId) {
+        return userRepository.findById(userId);
     }
 }

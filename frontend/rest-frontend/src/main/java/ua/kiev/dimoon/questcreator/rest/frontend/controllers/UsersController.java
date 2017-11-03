@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.UserJpaEntity;
+import ua.kiev.dimoon.questcreator.front.base.dto.DtoBuilder;
 import ua.kiev.dimoon.questcreator.user.service.api.services.UserService;
 
 import java.util.List;
@@ -16,9 +17,12 @@ import java.util.List;
 public class UsersController {
 
     private UserService userService;
+    private DtoBuilder dtoBuilder;
 
-    public UsersController(UserService userService) {
+    public UsersController(UserService userService,
+                           DtoBuilder dtoBuilder) {
         this.userService = userService;
+        this.dtoBuilder = dtoBuilder;
     }
 
     @Secured("ROLE_ADMIN")
@@ -34,5 +38,15 @@ public class UsersController {
     public String deleteUser(@PathVariable Integer userId) {
         userService.delete(userId);
         return "redirect:/users";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/view/{userId}", method = RequestMethod.GET)
+    public String viewUserInfo(@PathVariable Integer userId, Model model) {
+        userService.findUserById(userId)
+                .ifPresent(
+                        userEntity -> model.addAttribute("user", dtoBuilder.getUserDto(userEntity))
+                );
+        return "/users/view";
     }
 }
