@@ -127,11 +127,16 @@ public class QuestServiceImpl implements QuestService {
 
     @Override
     public void delete(Integer id) {
-
+        questRepository.delete(id);
     }
 
     @Override
     public QuestJpaEntity save(QuestJpaEntity quest) {
         return null;
+    }
+
+    @Override
+    public Optional<QuestJpaEntity> findQuestById(Integer questId) {
+        return questRepository.findById(questId);
     }
 }
