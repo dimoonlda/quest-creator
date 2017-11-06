@@ -17,6 +17,7 @@ public interface QuestService {
     List<QuestJpaEntity> getQuests();
     void delete(Integer id);
     QuestJpaEntity save(QuestJpaEntity quest);
+    Optional<QuestJpaEntity> findQuestById(Integer questId);
 
     static Optional<QuestJpaEntity> findCurrentQuest(Set<UserQuestJpaEntity> userQuests) {
         if (null == userQuests){

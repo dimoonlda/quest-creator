@@ -3,6 +3,7 @@ package ua.kiev.dimoon.questcreator.rest.frontend.controllers;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ua.kiev.dimoon.questcreator.front.base.dto.DtoBuilder;
@@ -32,4 +33,20 @@ public class QuestsController {
         return "/quests/all";
     }
 
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/delete/{questId}", method = RequestMethod.POST)
+    public String deleteUser(@PathVariable Integer questId) {
+        questService.delete(questId);
+        return "redirect:/quests";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/view/{questId}", method = RequestMethod.GET)
+    public String viewQuestInfo(@PathVariable Integer questId, Model model) {
+        questService.findQuestById(questId)
+                .ifPresent(
+                        questEntity -> model.addAttribute("quest", dtoBuilder.getQuestDto(questEntity))
+                );
+        return "/quests/view";
+    }
 }

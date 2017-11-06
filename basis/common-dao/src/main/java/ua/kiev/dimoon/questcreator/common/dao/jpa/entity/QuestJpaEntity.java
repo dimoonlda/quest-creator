@@ -11,6 +11,8 @@ import java.util.Set;
 @Table(name = "quests")
 public class QuestJpaEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quest_gen_id")
+    @SequenceGenerator(name = "quest_gen_id", sequenceName = "quests_id_seq", allocationSize = 10)
     private Integer id;
     @NotNull
     private String title;
