@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.*;
+import ua.kiev.dimoon.questcreator.common.dao.jpa.repository.QuestJpaRepository;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.repository.UserQuestJpaRepository;
 import ua.kiev.dimoon.questcreator.common.utils.security.SecuritiUtils;
 import ua.kiev.dimoon.questcreator.quest.service.api.services.QuestService;
@@ -20,6 +21,7 @@ public class QuestServiceImpl implements QuestService {
 
     @Autowired
     private UserQuestJpaRepository userQuestRepository;
+    @Autowired private QuestJpaRepository questRepository;
 
     @Override
     public List<UserQuestJpaEntity> getQuestsForCurrentUser() {
@@ -116,5 +118,20 @@ public class QuestServiceImpl implements QuestService {
             currentUserQuest.setCompleted(true);
             userQuestRepository.save(currentUserQuest);
         }
+    }
+
+    @Override
+    public List<QuestJpaEntity> getQuests() {
+        return questRepository.findAll();
+    }
+
+    @Override
+    public void delete(Integer id) {
+
+    }
+
+    @Override
+    public QuestJpaEntity save(QuestJpaEntity quest) {
+        return null;
     }
 }

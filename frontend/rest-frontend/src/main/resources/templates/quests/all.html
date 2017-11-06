@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title>Users</title>
+    <thymeleaf th:replace="fragments/head :: head"/>
+</head>
+<body>
+<div th:replace="fragments/header :: header">...</div>
+<div class="container">
+    <div class="row">
+        <form style="visibility: hidden" id="panel_form" method="post" action="#" th:action="@{/quests}"></form>
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <a class="btn btn-primary" role="button"
+               th:href="@{#}" th:onclick="|send_create_quest()|"
+               th:text="#{quests.all.panel.btn.create.quest}">Create</a>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <form style="visibility: hidden" id="delete_quest_form" method="post" action="#" th:action="@{/quests}">
+                <input id="user_id" type="hidden">
+            </form>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th th:text="#{quests.all.table.header.id}">ID</th>
+                    <th th:text="#{quests.all.table.header.title}">Login</th>
+                    <th th:text="#{quests.all.table.header.description}">First Name</th>
+                    <th th:text="#{quests.all.table.header.action}">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="quest : ${quests}">
+                    <td th:text="${quest.id}"></td>
+                    <td><a th:href="@{/quests/view/{id}/(id=${quest.id})}" th:text="${quest.title}"></a></td>
+                    <td th:text="${quest.description}"></td>
+                    <td>
+                        <a class="btn btn-primary" role="button"
+                           th:href="@{#}" th:onclick="|send_delete_quest('${quest.id}')|"
+                           th:text="#{quests.all.btn.delete.quest}">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+</div>
+<div th:replace="fragments/footer :: footer">...</div>
+<script>
+    function send_delete_quest(id) {
+        $('#delete_quest_form').attr('action', '/quests/delete/' + id).submit();
+    }
+    function send_create_quest() {
+        $('#panel_form').attr('action', '/quests/new').submit();
+    }
+</script>
+</body>
+</html>
