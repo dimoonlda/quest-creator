@@ -14,6 +14,9 @@ public interface QuestService {
     Boolean checkCurrentStepAnswer(String keyWord);
     Optional<QuestStepJpaEntity> getCurrentQuestStepForCurrentUser();
     void finishQuestForCurrentUser();
+    List<QuestJpaEntity> getQuests();
+    void delete(Integer id);
+    QuestJpaEntity save(QuestJpaEntity quest);
 
     static Optional<QuestJpaEntity> findCurrentQuest(Set<UserQuestJpaEntity> userQuests) {
         if (null == userQuests){
