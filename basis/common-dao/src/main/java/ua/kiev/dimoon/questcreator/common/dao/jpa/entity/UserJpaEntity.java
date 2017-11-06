@@ -2,18 +2,25 @@ package ua.kiev.dimoon.questcreator.common.dao.jpa.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Set;
+
+import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
 @Table(name = "users")
 public class UserJpaEntity {
     @Id
+    @SequenceGenerator(name = "user_gen_id", sequenceName = "users_id_seq", allocationSize = 10)
+    @GeneratedValue(strategy = SEQUENCE, generator = "user_gen_id")
     private Integer id;
     @Column(name = "first_name", nullable = false)
     @NotNull
+    @Size(min = 3)
     private String firstName;
     @Column(name = "user_login", nullable = false)
     @NotNull
+    @Size(min = 3)
     private String userLogin;
     @Column(name = "user_password", nullable = false)
     @NotNull
