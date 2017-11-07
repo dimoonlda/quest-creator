@@ -20,5 +20,9 @@
             <groupId>ua.kiev.dimoon.quest-creator</groupId>
             <artifactId>user-service-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ua.kiev.dimoon.quest-creator</groupId>
+            <artifactId>base-service-impl</artifactId>
+        </dependency>
     </dependencies>
 </project>

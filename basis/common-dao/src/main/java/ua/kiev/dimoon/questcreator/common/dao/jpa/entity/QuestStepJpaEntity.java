@@ -23,6 +23,9 @@ public class QuestStepJpaEntity {
     @OneToMany
     @JoinColumn(name = "quest_step_id", nullable = false)
     private Set<QuestStepFieldJpaEntity> fields;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "quest_id", nullable = false)
+    private QuestJpaEntity quest;
 
     public static final Comparator<QuestStepJpaEntity> SORT_BY_ODER = Comparator.comparing(QuestStepJpaEntity::getOrder);
 
@@ -68,5 +71,14 @@ public class QuestStepJpaEntity {
 
     public boolean isEndStep() {
         return StepType.END.equals(this.getStepType());
+    }
+
+    public QuestJpaEntity getQuest() {
+        return quest;
+    }
+
+    public QuestStepJpaEntity setQuest(QuestJpaEntity quest) {
+        this.quest = quest;
+        return this;
     }
 }

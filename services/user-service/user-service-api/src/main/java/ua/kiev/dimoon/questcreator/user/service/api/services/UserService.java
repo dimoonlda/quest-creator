@@ -1,13 +1,7 @@
 package ua.kiev.dimoon.questcreator.user.service.api.services;
 
+import ua.kiev.dimoon.questcreator.base.service.api.service.BaseService;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.UserJpaEntity;
 
-import java.util.List;
-import java.util.Optional;
-
-public interface UserService {
-    List<UserJpaEntity> getUsers();
-    void delete(Integer userId);
-    UserJpaEntity save(UserJpaEntity userEntity);
-    Optional<UserJpaEntity> findUserById(Integer userId);
+public interface UserService extends BaseService<UserJpaEntity, Integer>{
 }

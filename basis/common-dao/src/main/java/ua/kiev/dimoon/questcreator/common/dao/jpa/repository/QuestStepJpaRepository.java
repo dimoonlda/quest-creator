@@ -1,7 +1,9 @@
 package ua.kiev.dimoon.questcreator.common.dao.jpa.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.QuestStepJpaEntity;
 
-public interface QuestStepJpaRepository extends JpaRepository<QuestStepJpaEntity, Integer> {
+import java.util.List;
+
+public interface QuestStepJpaRepository extends BaseJpaRepository<QuestStepJpaEntity, Integer> {
+    List<QuestStepJpaEntity> findAllByQuest_IdOrderByOrder(Integer questId);
 }

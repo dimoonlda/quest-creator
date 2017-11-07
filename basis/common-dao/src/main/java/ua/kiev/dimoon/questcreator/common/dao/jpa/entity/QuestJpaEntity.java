@@ -17,8 +17,7 @@ public class QuestJpaEntity {
     @NotNull
     private String title;
     private String description;
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "quest_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "quest")
     private Set<QuestStepJpaEntity> questSteps;
 
     public Integer getId() {

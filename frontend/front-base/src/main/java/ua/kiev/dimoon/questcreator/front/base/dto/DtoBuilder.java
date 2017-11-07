@@ -41,13 +41,25 @@ public class DtoBuilder {
                 .collect(Collectors.toList());
     }
 
+    public List<QuestStepDto> getQuestStepDtos(List<QuestStepJpaEntity> questStepEntities) {
+        return questStepEntities
+                .stream()
+                .map(this::getQuestStepDto)
+                .collect(Collectors.toList());
+    }
+
     public QuestStepDto getQuestStepDto(QuestStepJpaEntity questStepEntity) {
         QuestStepDto questStepDto = modelMapper.map(questStepEntity, QuestStepDto.class);
         Set<QuestStepFieldJpaEntity> fields = questStepEntity.getFields();
-        questStepDto.setNeedAnswer(
-                fields.stream()
-                        .anyMatch(field -> field.getFieldType().equals(FieldType.ANSWER))
-        );
+        questStepDto.setNeedAnswer(false);
+        fields.stream()
+                .filter(field -> field.getFieldType().equals(FieldType.ANSWER))
+                .findFirst()
+                .map(this::getQuestStepFieldDto)
+                .ifPresent(answerFieldDto -> {
+                    questStepDto.setNeedAnswer(true);
+                    questStepDto.setAnswer(answerFieldDto);
+                });
         questStepDto.setAuxiliaryDatas(
                 fields.stream()
                         .filter(field -> field.getFieldType().equals(FieldType.AUXILIARY_DATA))

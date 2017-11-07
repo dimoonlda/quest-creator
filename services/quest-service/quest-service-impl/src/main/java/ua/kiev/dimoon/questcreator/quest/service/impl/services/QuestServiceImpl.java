@@ -3,6 +3,7 @@ package ua.kiev.dimoon.questcreator.quest.service.impl.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import ua.kiev.dimoon.questcreator.base.service.impl.service.AbstractBaseService;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.*;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.repository.QuestJpaRepository;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.repository.UserQuestJpaRepository;
@@ -17,11 +18,11 @@ import java.util.Set;
 import static ua.kiev.dimoon.questcreator.common.dao.jpa.entity.QuestStepJpaEntity.SORT_BY_ODER;
 
 @Service
-public class QuestServiceImpl implements QuestService {
+public class QuestServiceImpl
+        extends AbstractBaseService<QuestJpaEntity, Integer, QuestJpaRepository>
+        implements QuestService {
 
-    @Autowired
-    private UserQuestJpaRepository userQuestRepository;
-    @Autowired private QuestJpaRepository questRepository;
+    @Autowired private UserQuestJpaRepository userQuestRepository;
 
     @Override
     public List<UserQuestJpaEntity> getQuestsForCurrentUser() {
@@ -118,25 +119,5 @@ public class QuestServiceImpl implements QuestService {
             currentUserQuest.setCompleted(true);
             userQuestRepository.save(currentUserQuest);
         }
-    }
-
-    @Override
-    public List<QuestJpaEntity> getQuests() {
-        return questRepository.findAll();
-    }
-
-    @Override
-    public void delete(Integer id) {
-        questRepository.delete(id);
-    }
-
-    @Override
-    public QuestJpaEntity save(QuestJpaEntity quest) {
-        return null;
-    }
-
-    @Override
-    public Optional<QuestJpaEntity> findQuestById(Integer questId) {
-        return questRepository.findById(questId);
     }
 }
