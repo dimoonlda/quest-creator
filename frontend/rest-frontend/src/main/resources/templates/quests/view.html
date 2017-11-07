@@ -24,12 +24,70 @@
                         <strong th:text="|#{quests.view.quest.description}: |"></strong>
                         <span th:text="${quest.description}"></span>
                     </p>
-                    <a href="#" th:href="@{/quests/edit/{id}(id=${quest.id})}" class="btn btn-primary" th:text="#{quests.view.btn.edit.quest}">Edit</a>
+                    <a href="#" th:href="@{/quests/edit/{id}(id=${quest.id})}" class="btn btn-primary"
+                       th:text="#{quests.view.btn.edit.quest}">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" th:if="questSteps">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-header">
+                    <strong th:text="#{quests.view.quest.steps}"></strong>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <form style="visibility: hidden" id="panel_form" method="post" action="#"
+                              th:action="@{/quests/steps}"></form>
+
+                        <a class="btn btn-primary" role="button"
+                           th:href="@{#}" th:onclick="|send_create_quest_step()|"
+                           th:text="#{quests.view.panel.btn.create.questStep}">Create</a>
+
+                    </div>
+                    <div class="row">
+                        <form style="visibility: hidden" id="delete_quest_step_form" method="post" action="#"
+                              th:action="@{/quests/steps}">
+                        </form>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th th:text="#{quests.view.table.questStep.id}">ID</th>
+                                <th th:text="#{quests.view.questStep.order}"></th>
+                                <th th:text="#{quests.view.table.questStep.type}"></th>
+                                <th th:text="#{quests.view.table.header.action}">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="questStep : ${questSteps}">
+                                <td><a th:href="@{/quests/steps/view/{id}/(id=${questStep.id})}"
+                                       th:text="${questStep.id}"></a></td>
+                                <td th:text="${questStep.order}"></td>
+                                <td th:text="${questStep.stepType}"></td>
+                                <td>
+                                    <a class="btn btn-primary" role="button"
+                                       th:href="@{#}" th:onclick="|send_delete_quest_step('${questStep.id}')|"
+                                       th:text="#{quests.view.btn.delete.questStep}">Delete</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <div th:replace="fragments/footer :: footer">...</div>
+<script>
+    function send_delete_quest_step(id) {
+        $('#delete_quest_step_form').attr('action', '/quests/steps/delete/' + id).submit();
+    }
+    function send_create_quest_step() {
+        $('#panel_form').attr('action', '/quests/steps/new').submit();
+    }
+</script>
 </body>
 </html>

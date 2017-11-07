@@ -10,6 +10,8 @@ public class QuestStepDto {
     private List<QuestStepFieldDto> auxiliaryDatas;
     private StepType stepType;
     private Boolean needAnswer;
+    private QuestStepFieldDto answer;
+    private int order;
 
     public int getId() {
         return id;
@@ -53,6 +55,24 @@ public class QuestStepDto {
 
     public QuestStepDto setNeedAnswer(Boolean needAnswer) {
         this.needAnswer = needAnswer;
+        return this;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public QuestStepDto setOrder(int order) {
+        this.order = order;
+        return this;
+    }
+
+    public QuestStepFieldDto getAnswer() {
+        return answer;
+    }
+
+    public QuestStepDto setAnswer(QuestStepFieldDto answer) {
+        this.answer = answer;
         return this;
     }
 }

@@ -35,7 +35,7 @@ public class UsersController {
     @Secured("ROLE_ADMIN")
     @RequestMapping(method = RequestMethod.GET)
     public String showUsers(Model model) {
-        List<UserJpaEntity> users = userService.getUsers();
+        List<UserJpaEntity> users = userService.findAll();
         model.addAttribute("users", users);
         return "/users/all";
     }
@@ -50,7 +50,7 @@ public class UsersController {
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/view/{userId}", method = RequestMethod.GET)
     public String viewUserInfo(@PathVariable Integer userId, Model model) {
-        userService.findUserById(userId)
+        userService.findOne(userId)
                 .ifPresent(
                         userEntity -> model.addAttribute("user", dtoBuilder.getUserDto(userEntity))
                 );
@@ -60,7 +60,7 @@ public class UsersController {
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/edit/{userId}", method = RequestMethod.GET)
     public String editUser(Model model, @PathVariable Integer userId) {
-        userService.findUserById(userId)
+        userService.findOne(userId)
                 .ifPresent(
                         userEntity -> model.addAttribute("user", userEntity)
                 );

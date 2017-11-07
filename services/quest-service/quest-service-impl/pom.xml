@@ -14,6 +14,10 @@
     <dependencies>
         <dependency>
             <groupId>ua.kiev.dimoon.quest-creator</groupId>
+            <artifactId>base-service-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ua.kiev.dimoon.quest-creator</groupId>
             <artifactId>quest-service-api</artifactId>
         </dependency>
     </dependencies>
