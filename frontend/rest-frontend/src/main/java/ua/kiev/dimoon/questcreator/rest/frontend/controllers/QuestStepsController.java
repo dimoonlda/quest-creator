@@ -6,7 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.FieldDataType;
 import ua.kiev.dimoon.questcreator.front.base.dto.DtoBuilder;
+import ua.kiev.dimoon.questcreator.front.base.dto.QuestStepFieldDto;
 import ua.kiev.dimoon.questcreator.quest.service.api.services.QuestStepService;
 
 @Controller
@@ -32,7 +34,8 @@ public class QuestStepsController {
                                     dtoBuilder.getQuestStepDto(questStepEntity));
                         }
                 );
-
+        model.addAttribute("fieldDataTypes", FieldDataType.values());
+        model.addAttribute("questStepField", new QuestStepFieldDto());
         return "/quests/steps/view";
     }
 }

@@ -1,12 +1,14 @@
 package ua.kiev.dimoon.questcreator.front.base.dto;
 
 import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.FieldDataType;
+import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.FieldType;
 
 public class QuestStepFieldDto {
-    private int id;
+    private Integer id;
     private String value;
     private String title;
     private FieldDataType fieldDataType;
+    private FieldType fieldType;
 
     public String getValue() {
         return value;
@@ -35,12 +37,21 @@ public class QuestStepFieldDto {
         return this;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public QuestStepFieldDto setId(int id) {
+    public QuestStepFieldDto setId(Integer id) {
         this.id = id;
+        return this;
+    }
+
+    public FieldType getFieldType() {
+        return fieldType;
+    }
+
+    public QuestStepFieldDto setFieldType(FieldType fieldType) {
+        this.fieldType = fieldType;
         return this;
     }
 }

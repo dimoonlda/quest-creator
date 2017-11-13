@@ -42,4 +42,9 @@ public abstract class AbstractBaseService<E, ID extends Serializable, R extends 
     public void delete(ID id) {
         repository.delete(id);
     }
+
+    @Override
+    public E findById(ID id) {
+        return repository.findOne(id);
+    }
 }
