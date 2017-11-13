@@ -7,7 +7,8 @@
 <body>
 <div th:replace="fragments/header :: header">...</div>
 <div class="container">
-    <div class="modal fade" id="stepFieldModal" tabindex="-1" role="dialog" aria-labelledby="stepFieldModalLabel" aria-hidden="true">
+    <div class="modal fade" id="stepFieldModal" tabindex="-1" role="dialog" aria-labelledby="stepFieldModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -16,26 +17,39 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <form>
+                <form th:object="${questStepField}" method="post"
+                      th:action="@{/quests/steps/{stepId}/fields/save(stepId=${questStep.id})}">
+                    <input type="hidden" th:field="*{fieldType}" id="fieldType">
+                    <div class="modal-body">
                         <div class="form-group">
-                            <label for="fieldTitle" class="col-form-label" th:text="|#{questStep.view.auxiliaryData.table.header.title}: |">Title:</label>
-                            <input type="text" class="form-control" id="fieldTitle">
+                            <label for="fieldTitle" class="col-form-label"
+                                   th:text="|#{questStep.view.auxiliaryData.table.header.title}: |">Title:</label>
+                            <input type="text" class="form-control" id="fieldTitle" th:field="*{title}">
                         </div>
                         <div class="form-group">
-                            <label for="fieldValue" class="col-form-label" th:text="|#{questStep.view.auxiliaryData.table.header.value}: |">Value:</label>
-                            <input type="text" class="form-control" id="fieldValue"/>
+                            <label for="fieldValue" class="col-form-label"
+                                   th:text="|#{questStep.view.auxiliaryData.table.header.value}: |">Value:</label>
+                            <input type="text" class="form-control" id="fieldValue" th:field="*{value}"/>
                         </div>
                         <div class="form-group">
-                            <label for="fieldDataType" class="col-form-label" th:text="|#{questStep.view.auxiliaryData.table.header.fieldDataType}: |">Field data type:</label>
-                            <input type="text" class="form-control" id="fieldDataType"/>
+                            <label for="fieldDataType" class="col-form-label"
+                                   th:text="|#{questStep.view.auxiliaryData.table.header.fieldDataType}: |">Field data
+                                type:</label>
+                            <select th:field="*{fieldDataType}" id="fieldDataType" class="form-control">
+                                <option th:each="fieldDataType : ${fieldDataTypes}"
+                                        th:value="${fieldDataType}"
+                                        th:text="#{${'field.data.type.' + fieldDataType}}">fieldDataType
+                                </option>
+                            </select>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{btn.close}">Close</button>
-                    <button type="button" class="btn btn-primary" th:text="#{btn.create}">Create or save</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{btn.close}">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-primary" th:text="#{btn.create}">Create or save</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -65,16 +79,17 @@
                        th:href="@{/quests/steps/{id}/question/add(id=${questStep.id})}" class="btn btn-primary"
                        th:text="#{questStep.view.btn.add.questionField}"
                        data-toggle="modal" data-target="#stepFieldModal"
-                       data-fieldType="QUESTION">Add question field</a>
+                       data-field_type="QUESTION">Add question field</a>
                     <a th:if="not ${questStep.answer}" href="#"
                        th:href="@{/quests/steps/{id}/answer/add(id=${questStep.id})}" class="btn btn-primary"
                        th:text="#{questStep.view.btn.add.answerField}"
                        data-toggle="modal" data-target="#stepFieldModal"
-                       data-fieldType="ANSWER">Add answer field</a>
-                    <a href="#" th:href="@{/quests/steps/{id}/auxiliary/add(id=${questStep.id})}" class="btn btn-primary"
+                       data-field_type="ANSWER">Add answer field</a>
+                    <a href="#" th:href="@{/quests/steps/{id}/auxiliary/add(id=${questStep.id})}"
+                       class="btn btn-primary"
                        th:text="#{questStep.view.btn.add.auxiliaryField}"
                        data-toggle="modal" data-target="#stepFieldModal"
-                       data-fieldType="AUXILIARY_DATA">Add auxiliary field</a>
+                       data-field_type="AUXILIARY_DATA">Add auxiliary field</a>
                 </div>
             </div>
         </div>
@@ -99,9 +114,11 @@
                         <strong th:text="|#{questStep.view.question.fieldDataType}: |"></strong>
                         <span th:text="${questStep.question.fieldDataType}"></span>
                     </p>
-                    <a href="#" th:href="@{/quests/steps/fields/edit/{id}(id=${questStep.question.id})}" class="btn btn-primary"
+                    <a href="#" th:href="@{/quests/steps/fields/edit/{id}(id=${questStep.question.id})}"
+                       class="btn btn-primary"
                        th:text="#{questStep.view.btn.edit.question}">Edit</a>
-                    <a href="#" th:href="@{/quests/steps/fields/delete/{id}(id=${questStep.question.id})}" class="btn btn-primary"
+                    <a th:href="@{#}" th:onclick="|send_delete_quest_step_field('${questStep.id}','${questStep.question.id}')|"
+                       class="btn btn-primary"
                        th:text="#{questStep.view.btn.delete.question}">Delete</a>
                 </div>
             </div>
@@ -115,6 +132,7 @@
                     <strong th:text="#{questStep.view.auxiliaryDatas}"></strong>
                 </div>
                 <div class="card-body">
+<!--
                     <div class="row">
                         <form style="visibility: hidden" id="panel_form" method="post" action="#"
                               th:action="@{/quests/steps}"></form>
@@ -124,6 +142,7 @@
                            th:text="#{questStep.view.panel.btn.create.auxiliaryData}">Create</a>
 
                     </div>
+-->
                     <div class="row">
                         <form style="visibility: hidden" id="delete_quest_step_field_form" method="post" action="#"
                               th:action="@{/quests/steps}">
@@ -147,7 +166,7 @@
                                 <td th:text="${auxiliaryData.fieldDataType}"></td>
                                 <td>
                                     <a class="btn btn-primary" role="button"
-                                       th:href="@{#}" th:onclick="|send_delete_quest_step_field('${auxiliaryData.id}')|"
+                                       th:href="@{#}" th:onclick="|send_delete_quest_step_field('${questStep.id}','${auxiliaryData.id}')|"
                                        th:text="#{questStep.view.panel.btn.delete.auxiliaryData}">Delete</a>
                                 </td>
                             </tr>
@@ -161,18 +180,18 @@
 </div>
 <div th:replace="fragments/footer :: footer">...</div>
 <script>
-    function send_delete_quest_step_field(id) {
-        $('#delete_quest_step_form').attr('action', '/quests/steps/delete/' + id).submit();
+    function send_delete_quest_step_field(stepId, fieldId) {
+        $('#delete_quest_step_field_form').attr('action', '/quests/steps/' + stepId + '/fields/delete/' + fieldId).submit();
     }
     function send_create_quest_step_field() {
         $('#panel_form').attr('action', '/quests/steps/new').submit();
     }
     $('#stepFieldModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
-        var recipient = button.data('whatever');
+        var fieldType = button.data('field_type');
         var modal = $(this);
-        modal.find('.modal-title').text('New message to ' + recipient);
-        modal.find('.modal-body input').val(recipient)
+        modal.find('.modal-title').text('New ' + fieldType + ' field.');
+        modal.find($('#fieldType')).val(fieldType)
     })
 </script>
 </body>

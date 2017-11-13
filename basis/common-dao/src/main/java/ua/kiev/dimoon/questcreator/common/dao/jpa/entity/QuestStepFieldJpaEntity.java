@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 public class QuestStepFieldJpaEntity {
 
     @Id
+    @SequenceGenerator(sequenceName = "quest_step_fields_id_seq", name = "quest_ste_field_gen", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quest_ste_field_gen")
     private Integer id;
     private String title;
     @NotNull
@@ -21,6 +23,10 @@ public class QuestStepFieldJpaEntity {
     @NotNull
     @Column(name = "field_data_type_id", nullable = false)
     private FieldDataType fieldDataType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "quest_step_id", nullable = false)
+    private QuestStepJpaEntity questStep;
 
     public Integer getId() {
         return id;
@@ -64,6 +70,15 @@ public class QuestStepFieldJpaEntity {
 
     public QuestStepFieldJpaEntity setFieldDataType(FieldDataType fieldDataType) {
         this.fieldDataType = fieldDataType;
+        return this;
+    }
+
+    public QuestStepJpaEntity getQuestStep() {
+        return questStep;
+    }
+
+    public QuestStepFieldJpaEntity setQuestStep(QuestStepJpaEntity questStep) {
+        this.questStep = questStep;
         return this;
     }
 }

@@ -20,9 +20,10 @@ public class QuestStepJpaEntity {
     @Column(name = "step_type_id", nullable = false)
     @NotNull
     private StepType stepType;
-    @OneToMany
-    @JoinColumn(name = "quest_step_id", nullable = false)
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "questStep")
     private Set<QuestStepFieldJpaEntity> fields;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quest_id", nullable = false)
     private QuestJpaEntity quest;

@@ -12,6 +12,8 @@ public interface BaseService<E, ID extends Serializable> {
 
     List<E> findAll();
 
+    E findById(ID id);
+
     Optional<E> findOne(ID id);
 
     <S extends E> S save(S entity);
