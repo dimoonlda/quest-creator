@@ -2,10 +2,12 @@ package ua.kiev.dimoon.questcreator.rest.frontend.controllers;
 
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.FieldDataType;
 import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.QuestStepFieldJpaEntity;
 import ua.kiev.dimoon.questcreator.front.base.dto.DtoBuilder;
 import ua.kiev.dimoon.questcreator.front.base.dto.QuestStepFieldDto;
@@ -56,5 +58,27 @@ public class QuestStepFieldsController {
                               @PathVariable(value = "fieldId") Integer fieldId) {
         questStepFieldService.delete(fieldId);
         return "redirect:/quests/steps/view/" + stepId;
+    }
+
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/view/{fieldId}", method = RequestMethod.GET)
+    public String showModalForStepField(@PathVariable(value = "stepId") Integer stepId,
+                                       @PathVariable(value = "fieldId") Integer fieldId,
+                                       Model model) {
+        QuestStepFieldJpaEntity questStepFieldEntity = questStepFieldService.findById(fieldId);
+        model.addAttribute("questStepField", dtoBuilder.getQuestStepFieldDto(questStepFieldEntity));
+        model.addAttribute("questStep", dtoBuilder.getQuestStepDto(questStepFieldEntity.getQuestStep()));
+        model.addAttribute("fieldDataTypes", FieldDataType.values());
+        return "/quests/steps/view :: questStepFieldModal";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    public String showCreateModalForStepField(@PathVariable(value = "stepId") Integer stepId,
+                                        Model model) {
+        model.addAttribute("questStepField", new QuestStepFieldDto());
+        model.addAttribute("questStep", dtoBuilder.getQuestStepDto(questStepService.findById(stepId)));
+        model.addAttribute("fieldDataTypes", FieldDataType.values());
+        return "/quests/steps/view :: questStepFieldModal";
     }
 }
