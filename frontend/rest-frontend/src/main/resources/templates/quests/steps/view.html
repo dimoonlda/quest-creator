@@ -7,18 +7,21 @@
 <body>
 <div th:replace="fragments/header :: header">...</div>
 <div class="container">
+    <div id="questStepFieldModalHolder"></div>
     <div class="modal fade" id="stepFieldModal" tabindex="-1" role="dialog" aria-labelledby="stepFieldModalLabel"
-         aria-hidden="true">
+         aria-hidden="true" th:fragment="questStepFieldModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="stepFieldModalLabel">New message</h5>
+                    <h5 class="modal-title" id="stepFieldModalLabel"
+                        th:text="#{questStep.view.stepFieldModal.title.edit(${questStepField.fieldType})}">New message</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <form th:object="${questStepField}" method="post"
                       th:action="@{/quests/steps/{stepId}/fields/save(stepId=${questStep.id})}">
+                    <input type="hidden" th:field="*{id}" id="id">
                     <input type="hidden" th:field="*{fieldType}" id="fieldType">
                     <div class="modal-body">
                         <div class="form-group">
@@ -47,7 +50,8 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{btn.close}">
                             Close
                         </button>
-                        <button type="submit" class="btn btn-primary" th:text="#{btn.create}">Create or save</button>
+                        <button type="submit" id="btnCreateField" class="btn btn-primary" th:if="not ${questStepField.id}" th:text="#{btn.create}">Create</button>
+                        <button type="submit" id="btnSaveField" class="btn btn-primary" th:if="${questStepField.id}" th:text="#{btn.save}">Save</button>
                     </div>
                 </form>
             </div>
@@ -75,21 +79,15 @@
                     </p>
                     <a href="#" th:href="@{/quests/steps/edit/{id}(id=${questStep.id})}" class="btn btn-primary"
                        th:text="#{questStep.view.btn.edit.questStep}">Edit</a>
-                    <a th:if="not ${questStep.question}" href="#"
-                       th:href="@{/quests/steps/{id}/question/add(id=${questStep.id})}" class="btn btn-primary"
+                    <a th:if="not ${questStep.question}" href="#" class="btn btn-primary"
                        th:text="#{questStep.view.btn.add.questionField}"
-                       data-toggle="modal" data-target="#stepFieldModal"
-                       data-field_type="QUESTION">Add question field</a>
-                    <a th:if="not ${questStep.answer}" href="#"
-                       th:href="@{/quests/steps/{id}/answer/add(id=${questStep.id})}" class="btn btn-primary"
+                       th:onclick="|createQuestStepFieldModal('${questStep.id}', 'QUESTION')|">Add question field</a>
+                    <a th:if="not ${questStep.answer}" href="#" class="btn btn-primary"
                        th:text="#{questStep.view.btn.add.answerField}"
-                       data-toggle="modal" data-target="#stepFieldModal"
-                       data-field_type="ANSWER">Add answer field</a>
-                    <a href="#" th:href="@{/quests/steps/{id}/auxiliary/add(id=${questStep.id})}"
-                       class="btn btn-primary"
-                       th:text="#{questStep.view.btn.add.auxiliaryField}"
-                       data-toggle="modal" data-target="#stepFieldModal"
-                       data-field_type="AUXILIARY_DATA">Add auxiliary field</a>
+                       th:onclick="|createQuestStepFieldModal('${questStep.id}', 'ANSWER')|">Add answer field</a>
+                    <a href="#" class="btn btn-primary"
+                       th:onclick="|createQuestStepFieldModal('${questStep.id}', 'AUXILIARY_DATA')|"
+                       th:text="#{questStep.view.btn.add.auxiliaryField}">Add auxiliary field</a>
                 </div>
             </div>
         </div>
@@ -159,8 +157,8 @@
                             </thead>
                             <tbody>
                             <tr th:each="auxiliaryData : ${questStep.auxiliaryDatas}">
-                                <td><a th:href="@{/quests/steps/view/{id}/(id=${auxiliaryData.id})}"
-                                       th:text="${auxiliaryData.id}"></a></td>
+                                <td><a href="#"
+                                       th:text="${auxiliaryData.id}" th:onclick="|openQuestStepFieldModal('${questStep.id}','${auxiliaryData.id}')|"></a></td>
                                 <td th:text="${auxiliaryData.title}"></td>
                                 <td th:text="${auxiliaryData.value}"></td>
                                 <td th:text="${auxiliaryData.fieldDataType}"></td>
@@ -186,13 +184,27 @@
     function send_create_quest_step_field() {
         $('#panel_form').attr('action', '/quests/steps/new').submit();
     }
-    $('#stepFieldModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget);
-        var fieldType = button.data('field_type');
-        var modal = $(this);
-        modal.find('.modal-title').text('New ' + fieldType + ' field.');
-        modal.find($('#fieldType')).val(fieldType)
-    })
+    function openQuestStepFieldModal(stepId, fieldId) {
+        $.ajax({
+            url: '/quests/steps/' + stepId + '/fields/view/' + fieldId,
+            success: function (data) {
+                $("#questStepFieldModalHolder").html(data);
+                $("#stepFieldModal").modal("show");
+            }
+        });
+    }
+
+    function createQuestStepFieldModal(stepId, fieldType) {
+        $.ajax({
+            url: '/quests/steps/' + stepId + '/fields/create',
+            success: function (data) {
+                $("#questStepFieldModalHolder").html(data);
+                $(".modal-title").text('New ' + fieldType + ' field.');
+                $("#fieldType").val(fieldType);
+                $("#stepFieldModal").modal("show");
+            }
+        });
+    }
 </script>
 </body>
 </html>
