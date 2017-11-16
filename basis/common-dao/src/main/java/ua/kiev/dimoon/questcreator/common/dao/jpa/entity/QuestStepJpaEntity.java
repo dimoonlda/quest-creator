@@ -12,6 +12,8 @@ import java.util.Set;
 @Table(name = "quest_steps")
 public class QuestStepJpaEntity {
     @Id
+    @SequenceGenerator(name = "quest_step_gen", sequenceName = "quest_steps_id_seq", allocationSize = 10)
+    @GeneratedValue(generator = "quest_step_gen", strategy = GenerationType.SEQUENCE)
     private Integer id;
     @Column(name = "step_order", nullable = false)
     @NotNull

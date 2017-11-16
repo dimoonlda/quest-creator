@@ -40,16 +40,16 @@ public class QuestStepFieldsController {
                     .orElse(new QuestStepFieldJpaEntity());
         } else {
             questStepFieldEntity = new QuestStepFieldJpaEntity();
+            questStepFieldEntity.setQuestStep(questStepService.findById(stepId));
         }
         questStepFieldService.save(
                 questStepFieldEntity
-                        .setQuestStep(questStepService.findById(stepId))
                         .setFieldDataType(fieldDto.getFieldDataType())
                         .setFieldType(fieldDto.getFieldType())
                         .setTitle(fieldDto.getTitle())
                         .setValue(fieldDto.getValue())
         );
-        return "redirect:/quests/steps/view/" + stepId;
+        return "redirect:/quests/" + questStepFieldEntity.getQuestStep().getQuest().getId() + "/steps/view/" + stepId;
     }
 
     @Secured("ROLE_ADMIN")

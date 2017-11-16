@@ -5,19 +5,20 @@ import ua.kiev.dimoon.questcreator.common.dao.jpa.entity.StepType;
 import java.util.List;
 
 public class QuestStepDto {
-    private int id;
+    private Integer id;
     private QuestStepFieldDto question;
     private List<QuestStepFieldDto> auxiliaryDatas;
     private StepType stepType;
     private Boolean needAnswer;
     private QuestStepFieldDto answer;
-    private int order;
+    private Integer order;
+    private QuestDto quest;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public QuestStepDto setId(int id) {
+    public QuestStepDto setId(Integer id) {
         this.id = id;
         return this;
     }
@@ -58,11 +59,11 @@ public class QuestStepDto {
         return this;
     }
 
-    public int getOrder() {
+    public Integer getOrder() {
         return order;
     }
 
-    public QuestStepDto setOrder(int order) {
+    public QuestStepDto setOrder(Integer order) {
         this.order = order;
         return this;
     }
@@ -73,6 +74,15 @@ public class QuestStepDto {
 
     public QuestStepDto setAnswer(QuestStepFieldDto answer) {
         this.answer = answer;
+        return this;
+    }
+
+    public QuestDto getQuest() {
+        return quest;
+    }
+
+    public QuestStepDto setQuest(QuestDto quest) {
+        this.quest = quest;
         return this;
     }
 }

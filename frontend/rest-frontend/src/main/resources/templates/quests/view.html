@@ -7,6 +7,7 @@
 <body>
 <div th:replace="fragments/header :: header">...</div>
 <div class="container">
+    <div id="questStepModalHolder"></div>
     <div class="row">
         <div class="col-sm-2"></div>
         <div class="col-sm-8">
@@ -39,12 +40,9 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <form style="visibility: hidden" id="panel_form" method="post" action="#"
-                              th:action="@{/quests/steps}"></form>
-
-                        <a class="btn btn-primary" role="button"
-                           th:href="@{#}" th:onclick="|send_create_quest_step()|"
-                           th:text="#{quests.view.panel.btn.create.questStep}">Create</a>
+                        <a class="btn btn-primary" role="button" href="#"
+                           th:onclick="|createQuestStepModal('${quest.id}')|"
+                           th:text="#{btn.create}">Create</a>
 
                     </div>
                     <div class="row">
@@ -62,7 +60,7 @@
                             </thead>
                             <tbody>
                             <tr th:each="questStep : ${questSteps}">
-                                <td><a th:href="@{/quests/steps/view/{id}/(id=${questStep.id})}"
+                                <td><a th:href="@{/quests/{questId}/steps/view/{id}/(id=${questStep.id},questId=${quest.id})}"
                                        th:text="${questStep.id}"></a></td>
                                 <td th:text="${questStep.order}"></td>
                                 <td th:text="${questStep.stepType}"></td>
@@ -87,6 +85,16 @@
     }
     function send_create_quest_step() {
         $('#panel_form').attr('action', '/quests/steps/new').submit();
+    }
+
+    function createQuestStepModal(questId) {
+        $.ajax({
+            url: '/quests/' + questId + '/steps/create',
+            success: function (data) {
+                $("#questStepModalHolder").html(data);
+                $("#stepModal").modal("show");
+            }
+        });
     }
 </script>
 </body>
