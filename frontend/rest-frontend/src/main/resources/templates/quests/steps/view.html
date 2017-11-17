@@ -22,7 +22,7 @@
                     </button>
                 </div>
                 <form th:object="${questStepField}" method="post"
-                      th:action="@{/quests/steps/{stepId}/fields/save(stepId=${questStep.id})}">
+                      th:action="@{/quests/{questId}/steps/{stepId}/fields/save(questId=${questStep.quest.id},stepId=${questStep.id})}">
                     <input type="hidden" th:field="*{id}" id="id">
                     <input type="hidden" th:field="*{fieldType}" id="fieldType">
                     <div class="modal-body">
@@ -135,12 +135,12 @@
                        th:text="#{questStep.view.btn.edit.questStep}">Edit</a>
                     <a th:if="not ${questStep.question}" href="#" class="btn btn-primary"
                        th:text="#{questStep.view.btn.add.questionField}"
-                       th:onclick="|createQuestStepFieldModal('${questStep.id}', 'QUESTION')|">Add question field</a>
+                       th:onclick="|createQuestStepFieldModal('${questStep.quest.id}','${questStep.id}', 'QUESTION')|">Add question field</a>
                     <a th:if="not ${questStep.answer}" href="#" class="btn btn-primary"
                        th:text="#{questStep.view.btn.add.answerField}"
-                       th:onclick="|createQuestStepFieldModal('${questStep.id}', 'ANSWER')|">Add answer field</a>
+                       th:onclick="|createQuestStepFieldModal('${questStep.quest.id}','${questStep.id}', 'ANSWER')|">Add answer field</a>
                     <a href="#" class="btn btn-primary"
-                       th:onclick="|createQuestStepFieldModal('${questStep.id}', 'AUXILIARY_DATA')|"
+                       th:onclick="|createQuestStepFieldModal('${questStep.quest.id}','${questStep.id}', 'AUXILIARY_DATA')|"
                        th:text="#{questStep.view.btn.add.auxiliaryField}">Add auxiliary field</a>
                 </div>
             </div>
@@ -166,11 +166,11 @@
                         <strong th:text="|#{questStep.view.question.fieldDataType}: |"></strong>
                         <span th:text="${questStep.question.fieldDataType}"></span>
                     </p>
-                    <a href="#" th:onclick="|openQuestStepFieldModal('${questStep.id}','${questStep.question.id}')|"
+                    <a href="#" th:onclick="|openQuestStepFieldModal('${questStep.quest.id}','${questStep.id}','${questStep.question.id}')|"
                        class="btn btn-primary"
                        th:text="#{questStep.view.btn.edit.question}">Edit</a>
                     <a th:href="@{#}"
-                       th:onclick="|send_delete_quest_step_field('${questStep.id}','${questStep.question.id}')|"
+                       th:onclick="|send_delete_quest_step_field('${questStep.quest.id}','${questStep.id}','${questStep.question.id}')|"
                        class="btn btn-primary"
                        th:text="#{questStep.view.btn.delete.question}">Delete</a>
                 </div>
@@ -214,7 +214,7 @@
                             <tr th:each="auxiliaryData : ${questStep.auxiliaryDatas}">
                                 <td><a href="#"
                                        th:text="${auxiliaryData.id}"
-                                       th:onclick="|openQuestStepFieldModal('${questStep.id}','${auxiliaryData.id}')|"></a>
+                                       th:onclick="|openQuestStepFieldModal('${questStep.quest.id}','${questStep.id}','${auxiliaryData.id}')|"></a>
                                 </td>
                                 <td th:text="${auxiliaryData.title}"></td>
                                 <td th:text="${auxiliaryData.value}"></td>
@@ -222,7 +222,7 @@
                                 <td>
                                     <a class="btn btn-primary" role="button"
                                        th:href="@{#}"
-                                       th:onclick="|send_delete_quest_step_field('${questStep.id}','${auxiliaryData.id}')|"
+                                       th:onclick="|send_delete_quest_step_field('${questStep.quest.id}','${questStep.id}','${auxiliaryData.id}')|"
                                        th:text="#{questStep.view.panel.btn.delete.auxiliaryData}">Delete</a>
                                 </td>
                             </tr>
@@ -253,11 +253,11 @@
                         <strong th:text="|#{questStep.view.answer.fieldDataType}: |"></strong>
                         <span th:text="${questStep.answer.fieldDataType}"></span>
                     </p>
-                    <a href="#" th:onclick="|openQuestStepFieldModal('${questStep.id}','${questStep.answer.id}')|"
+                    <a href="#" th:onclick="|openQuestStepFieldModal('${questStep.quest.id}','${questStep.id}','${questStep.answer.id}')|"
                        class="btn btn-primary"
                        th:text="#{btn.edit}">Edit</a>
                     <a th:href="@{#}"
-                       th:onclick="|send_delete_quest_step_field('${questStep.id}','${questStep.answer.id}')|"
+                       th:onclick="|send_delete_quest_step_field('${questStep.quest.id}','${questStep.id}','${questStep.answer.id}')|"
                        class="btn btn-primary"
                        th:text="#{btn.delete}">Delete</a>
                 </div>
@@ -267,15 +267,12 @@
 </div>
 <div th:replace="fragments/footer :: footer">...</div>
 <script>
-    function send_delete_quest_step_field(stepId, fieldId) {
-        $('#delete_quest_step_field_form').attr('action', '/quests/steps/' + stepId + '/fields/delete/' + fieldId).submit();
+    function send_delete_quest_step_field(questId, stepId, fieldId) {
+        $('#delete_quest_step_field_form').attr('action', '/quests/' + questId + '/steps/' + stepId + '/fields/delete/' + fieldId).submit();
     }
-    function send_create_quest_step_field() {
-        $('#panel_form').attr('action', '/quests/steps/new').submit();
-    }
-    function openQuestStepFieldModal(stepId, fieldId) {
+    function openQuestStepFieldModal(questId, stepId, fieldId) {
         $.ajax({
-            url: '/quests/steps/' + stepId + '/fields/view/' + fieldId,
+            url: '/quests/' + questId + '/steps/' + stepId + '/fields/view/' + fieldId,
             success: function (data) {
                 $("#questStepFieldModalHolder").html(data);
                 $("#stepFieldModal").modal("show");
@@ -283,9 +280,9 @@
         });
     }
 
-    function createQuestStepFieldModal(stepId, fieldType) {
+    function createQuestStepFieldModal(questId, stepId, fieldType) {
         $.ajax({
-            url: '/quests/steps/' + stepId + '/fields/create',
+            url: '/quests/' + questId + '/steps/' + stepId + '/fields/create',
             success: function (data) {
                 $("#questStepFieldModalHolder").html(data);
                 $(".modal-title").text('New ' + fieldType + ' field.');

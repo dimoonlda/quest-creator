@@ -79,4 +79,13 @@ public class QuestStepsController {
         return "/quests/steps/view :: questStepModal";
     }
 
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/{stepId}/delete", method = RequestMethod.POST)
+    public String deleteStep(@PathVariable(value = "stepId") Integer stepId,
+                              @PathVariable(value = "questId") Integer questId) {
+        questStepService.delete(stepId);
+        return String.format("redirect:/quests/view/%s", questId);
+    }
+
+
 }

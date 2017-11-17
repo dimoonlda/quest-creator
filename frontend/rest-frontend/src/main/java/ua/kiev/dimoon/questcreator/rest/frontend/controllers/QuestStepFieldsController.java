@@ -15,7 +15,7 @@ import ua.kiev.dimoon.questcreator.quest.service.api.services.QuestStepFieldServ
 import ua.kiev.dimoon.questcreator.quest.service.api.services.QuestStepService;
 
 @Controller
-@RequestMapping(value = "/quests/steps/{stepId}/fields")
+@RequestMapping(value = "/quests/{questId}/steps/{stepId}/fields")
 public class QuestStepFieldsController {
 
     private DtoBuilder dtoBuilder;
@@ -33,7 +33,8 @@ public class QuestStepFieldsController {
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String saveQuestStepField(@ModelAttribute(value = "questStepField") QuestStepFieldDto fieldDto,
-                                     @PathVariable(value = "stepId") Integer stepId) {
+                                     @PathVariable(value = "stepId") Integer stepId,
+                                     @PathVariable(value = "questId") Integer questId) {
         QuestStepFieldJpaEntity questStepFieldEntity;
         if (null != fieldDto.getId()) {
             questStepFieldEntity = questStepFieldService.findOne(fieldDto.getId())
@@ -49,22 +50,24 @@ public class QuestStepFieldsController {
                         .setTitle(fieldDto.getTitle())
                         .setValue(fieldDto.getValue())
         );
-        return "redirect:/quests/" + questStepFieldEntity.getQuestStep().getQuest().getId() + "/steps/view/" + stepId;
+        return String.format("redirect:/quests/%s/steps/view/%s", questId, stepId);
     }
 
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/delete/{fieldId}", method = RequestMethod.POST)
     public String deleteField(@PathVariable(value = "stepId") Integer stepId,
-                              @PathVariable(value = "fieldId") Integer fieldId) {
+                              @PathVariable(value = "fieldId") Integer fieldId,
+                              @PathVariable(value = "questId") Integer questId) {
         questStepFieldService.delete(fieldId);
-        return "redirect:/quests/steps/view/" + stepId;
+        return String.format("redirect:/quests/%s/steps/view/%s", questId, stepId);
     }
 
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/view/{fieldId}", method = RequestMethod.GET)
     public String showModalForStepField(@PathVariable(value = "stepId") Integer stepId,
-                                       @PathVariable(value = "fieldId") Integer fieldId,
-                                       Model model) {
+                                        @PathVariable(value = "fieldId") Integer fieldId,
+                                        @PathVariable(value = "questId") Integer questId,
+                                        Model model) {
         QuestStepFieldJpaEntity questStepFieldEntity = questStepFieldService.findById(fieldId);
         model.addAttribute("questStepField", dtoBuilder.getQuestStepFieldDto(questStepFieldEntity));
         model.addAttribute("questStep", dtoBuilder.getQuestStepDto(questStepFieldEntity.getQuestStep()));
@@ -75,7 +78,8 @@ public class QuestStepFieldsController {
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String showCreateModalForStepField(@PathVariable(value = "stepId") Integer stepId,
-                                        Model model) {
+                                              @PathVariable(value = "questId") Integer questId,
+                                              Model model) {
         model.addAttribute("questStepField", new QuestStepFieldDto());
         model.addAttribute("questStep", dtoBuilder.getQuestStepDto(questStepService.findById(stepId)));
         model.addAttribute("fieldDataTypes", FieldDataType.values());
