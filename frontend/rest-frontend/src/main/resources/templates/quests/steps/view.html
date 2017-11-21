@@ -266,7 +266,7 @@
     </div>
 </div>
 <div th:replace="fragments/footer :: footer">...</div>
-<script>
+<script th:inline="javascript">
     function send_delete_quest_step_field(questId, stepId, fieldId) {
         $('#delete_quest_step_field_form').attr('action', '/quests/' + questId + '/steps/' + stepId + '/fields/delete/' + fieldId).submit();
     }
@@ -285,7 +285,7 @@
             url: '/quests/' + questId + '/steps/' + stepId + '/fields/create',
             success: function (data) {
                 $("#questStepFieldModalHolder").html(data);
-                $(".modal-title").text('New ' + fieldType + ' field.');
+                $(".modal-title").text([[#{questStep.view.stepFieldModal.title.create}]] + fieldType);
                 $("#fieldType").val(fieldType);
                 $("#stepFieldModal").modal("show");
             }
